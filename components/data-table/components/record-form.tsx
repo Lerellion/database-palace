@@ -1,7 +1,5 @@
 'use client'
 
-import { cn } from 'helpers'
-
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -15,6 +13,7 @@ import {
 import { Switch } from '@/components/ui/switch'
 import { toast } from '@/components/ui/use-toast'
 
+import { cn } from 'helpers'
 import { Suspense, useState } from 'react'
 
 import { TableService } from '../services/table-service'

@@ -1,7 +1,5 @@
 'use client'
 
-import { useConnectionStore } from '@/lib/store/connection-store'
-
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -11,6 +9,8 @@ import { Database, Table as TableIcon } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 
+import { useConnectionStore } from '@/state/'
+
 function TableViewContent() {
 	const { isConnected, tables } = useConnectionStore()
 	const searchParams = useSearchParams()
@@ -18,16 +18,16 @@ function TableViewContent() {
 
 	if (!isConnected) {
 		return (
-			<div className="flex h-full items-center justify-center">
+			<div className="grid place-items-center w-full h-screen AAAA">
 				<Card className="w-96 p-6">
 					<div className="flex flex-col items-center gap-4 text-center">
 						<Database className="h-12 w-12 text-muted-foreground" />
-						<div>
+						<>
 							<h2 className="text-lg font-semibold">No Active Connection</h2>
 							<p className="text-sm text-muted-foreground">
 								Connect to a database to view and manage tables
 							</p>
-						</div>
+						</>
 						<Button asChild className="w-full">
 							<a href="/database">Connect Database</a>
 						</Button>
@@ -39,16 +39,16 @@ function TableViewContent() {
 
 	if (!tables || tables.length === 0) {
 		return (
-			<div className="flex h-full items-center justify-center">
+			<div className="grid place-items-center w-full h-screen AAAA">
 				<Card className="w-96 p-6">
 					<div className="flex flex-col items-center gap-4 text-center">
 						<TableIcon className="h-12 w-12 text-muted-foreground" />
-						<div>
+						<>
 							<h2 className="text-lg font-semibold">No Tables Found</h2>
 							<p className="text-sm text-muted-foreground">
 								The connected database has no tables
 							</p>
-						</div>
+						</>
 					</div>
 				</Card>
 			</div>
@@ -57,16 +57,16 @@ function TableViewContent() {
 
 	if (!currentTable) {
 		return (
-			<div className="flex h-full items-center justify-center">
+			<div className="grid place-items-center w-full h-screen AAAA">
 				<Card className="w-96 p-6">
 					<div className="flex flex-col items-center gap-4 text-center">
 						<TableIcon className="h-12 w-12 text-muted-foreground" />
-						<div>
+						<>
 							<h2 className="text-lg font-semibold">Select a Table</h2>
 							<p className="text-sm text-muted-foreground">
 								Choose a table from the sidebar to view its data
 							</p>
-						</div>
+						</>
 					</div>
 				</Card>
 			</div>
@@ -76,12 +76,10 @@ function TableViewContent() {
 	return (
 		<div className="flex h-full flex-col">
 			<div className="flex items-center justify-between border-b border-border p-4">
-				<div>
+				<>
 					<h1 className="text-lg font-semibold">{currentTable}</h1>
-					<p className="text-sm text-muted-foreground">
-						View and manage table data
-					</p>
-				</div>
+					<p className="text-sm text-muted-foreground">View and manage table data</p>
+				</>
 			</div>
 
 			<Tabs defaultValue="data" className="flex-1">

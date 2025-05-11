@@ -1,7 +1,6 @@
 'use client'
 
 import { cn } from 'helpers'
-
 import React from 'react'
 
 type ScrollableContainerProps = {

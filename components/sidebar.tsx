@@ -1,10 +1,9 @@
 'use client'
 
-import { cn } from 'helpers'
-
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
+import { cn } from 'helpers'
 import { ChevronRight, Database, Shield } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'

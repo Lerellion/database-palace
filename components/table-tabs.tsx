@@ -1,16 +1,7 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { cn } from 'helpers'
-import { X } from 'lucide-react'
-
-type TTab = {
-	table: string
-	active: boolean
-}
+import { Suspense } from 'react'
 
 function TableTabsContent({ tabs }: { tabs: string[] }) {
 	const router = useRouter()

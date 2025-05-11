@@ -6,7 +6,7 @@ import { FileDown, PlusCircle, Table, Upload } from 'lucide-react'
 
 export function EmptyState() {
 	return (
-		<div className="flex h-full items-center justify-center">
+		<div className="grid place-items-center w-full h-screen AAAA">
 			<div className="mx-auto flex max-w-[420px] flex-col items-center text-center">
 				<div className="mb-4 rounded-full bg-muted/20 p-3">
 					<Table className="h-10 w-10 text-muted-foreground" />
