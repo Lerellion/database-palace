@@ -3,7 +3,6 @@ import postgres from 'postgres'
 
 import * as schema from '../lib/schema/postgres'
 
-
 type Role = 'admin' | 'user' | 'guest'
 type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
 
