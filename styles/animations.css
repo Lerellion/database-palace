@@ -1,0 +1,265 @@
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.fadeIn {
+	opacity: 0;
+}
+
+.fadeIn.visible {
+	animation: fadeIn 0.8s ease forwards;
+}
+
+@keyframes shrinkWidth {
+	from {
+		width: 100%;
+		max-width: 100%;
+	}
+	to {
+		width: 1056px;
+		max-width: calc(100% - 48px);
+	}
+}
+
+@keyframes slideFromRight {
+	from {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(-50%);
+		opacity: 1;
+	}
+}
+
+.header-nav-container {
+	width: 100%;
+	max-width: 100%;
+	transition: all 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.header-nav-container.scrolled {
+	position: fixed;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 50;
+	animation: shrinkWidth 0.4s cubic-bezier(0.645, 0.045, 0.355, 1) forwards;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.header-nav-container.slide-in {
+	animation: slideFromRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Feature hover effects */
+@keyframes pulse {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.05);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+.feature-icon-pulse {
+	animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.spin-slow {
+	animation: spin 20s linear infinite;
+}
+
+@keyframes float {
+	0% {
+		transform: translateY(0px);
+	}
+	50% {
+		transform: translateY(-10px);
+	}
+	100% {
+		transform: translateY(0px);
+	}
+}
+
+.float {
+	animation: float 5s ease-in-out infinite;
+}
+
+/* Developer count pill animation */
+@keyframes countUp {
+	0% {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes gradientShift {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.dev-count-pill {
+	position: relative;
+	overflow: hidden;
+	background-size: 200% 200%;
+	animation: gradientShift 3s ease infinite;
+	transition: all 0.3s ease;
+}
+
+.dev-count-pill:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Animate count up effect */
+.animate-countUp {
+	opacity: 0;
+	transform: translateY(10px);
+	animation: countUp 0.5s ease-out forwards;
+}
+
+/* Shimmer effect for npm button */
+@keyframes shimmer {
+	0% {
+		background-position: -200% 0;
+	}
+	100% {
+		background-position: 200% 0;
+	}
+}
+
+.shimmer-effect {
+	position: relative;
+	overflow: hidden;
+}
+
+.shimmer-effect::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: linear-gradient(
+		90deg,
+		rgba(255, 255, 255, 0) 0%,
+		rgba(255, 255, 255, 0.1) 50%,
+		rgba(255, 255, 255, 0) 100%
+	);
+	background-size: 200% 100%;
+	animation: shimmer 2.5s infinite;
+	pointer-events: none;
+}
+
+/* Fine-grained stagger delays */
+.stagger-1 {
+	animation-delay: 100ms;
+}
+.stagger-2 {
+	animation-delay: 200ms;
+}
+.stagger-3 {
+	animation-delay: 300ms;
+}
+.stagger-4 {
+	animation-delay: 400ms;
+}
+.stagger-5 {
+	animation-delay: 500ms;
+}
+.stagger-6 {
+	animation-delay: 600ms;
+}
+.stagger-7 {
+	animation-delay: 700ms;
+}
+.stagger-8 {
+	animation-delay: 800ms;
+}
+.stagger-9 {
+	animation-delay: 900ms;
+}
+.stagger-10 {
+	animation-delay: 1000ms;
+}
+.stagger-12 {
+	animation-delay: 1200ms;
+}
+.stagger-15 {
+	animation-delay: 1500ms;
+}
+.stagger-20 {
+	animation-delay: 2000ms;
+}
+
+/* Custom delays for more control */
+.delay-100 {
+	animation-delay: 100ms;
+}
+.delay-200 {
+	animation-delay: 200ms;
+}
+.delay-300 {
+	animation-delay: 300ms;
+}
+.delay-400 {
+	animation-delay: 400ms;
+}
+.delay-500 {
+	animation-delay: 500ms;
+}
+.delay-600 {
+	animation-delay: 600ms;
+}
+.delay-700 {
+	animation-delay: 700ms;
+}
+.delay-800 {
+	animation-delay: 800ms;
+}
+.delay-900 {
+	animation-delay: 900ms;
+}
+.delay-1000 {
+	animation-delay: 1000ms;
+}
+.delay-1200 {
+	animation-delay: 1200ms;
+}
+.delay-1500 {
+	animation-delay: 1500ms;
+}
+.delay-2000 {
+	animation-delay: 2000ms;
+}
