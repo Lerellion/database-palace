@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import { TableView } from "../components/table-view"
+import { TableView } from '../components/table-view'
 
 export default function SyntheticV0PageForDeployment() {
-  return <TableView />
+	return <TableView />
 }

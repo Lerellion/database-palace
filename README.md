@@ -21,43 +21,48 @@ A powerful dashboard for visualizing and managing Neon PostgreSQL databases. Thi
 ### Installation
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/postgres-dashboard.git
-   cd postgres-dashboard
-   ```
+
+    ```bash
+    git clone https://github.com/yourusername/postgres-dashboard.git
+    cd postgres-dashboard
+    ```
 
 2. Install dependencies:
-   ```bash
-   npm install
-   # or
-   yarn install
-   # or
-   pnpm install
-   ```
+
+    ```bash
+    npm install
+    # or
+    yarn install
+    # or
+    pnpm install
+    ```
 
 3. Set up environment variables:
    Create a `.env` file in the root directory with the following variables:
-   ```
-   # Neon PostgreSQL configuration
-   DATABASE_URL=your_neon_connection_string
-   ```
+
+    ```
+    # Neon PostgreSQL configuration
+    DATABASE_URL=your_neon_connection_string
+    ```
 
 4. Run the setup script to create database schemas and seed demo data:
-   ```bash
-   chmod +x scripts/toggle-demo-data.sh
-   ./scripts/toggle-demo-data.sh
-   ```
-   
-   Select option 4 for a full setup (create schemas + seed demo data).
+
+    ```bash
+    chmod +x scripts/toggle-demo-data.sh
+    ./scripts/toggle-demo-data.sh
+    ```
+
+    Select option 4 for a full setup (create schemas + seed demo data).
 
 5. Start the development server:
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   # or
-   pnpm dev
-   ```
+
+    ```bash
+    npm run dev
+    # or
+    yarn dev
+    # or
+    pnpm dev
+    ```
 
 6. Open [http://localhost:3000](http://localhost:3000) in your browser to see the dashboard.
 
@@ -97,6 +102,7 @@ The dashboard comes with a demo data script that creates sample tables and popul
 ```
 
 This script provides options to:
+
 1. Create database schemas
 2. Seed databases with demo data
 3. Reset databases (remove all data)
@@ -124,9 +130,9 @@ This script provides options to:
 
 1. Define your table schema in `lib/schema/postgres.ts`
 2. Run migrations using Drizzle Kit:
-   ```bash
-   npx drizzle-kit push
-   ```
+    ```bash
+    npx drizzle-kit push
+    ```
 
 ### Extending Functionality
 

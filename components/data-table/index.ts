@@ -14,19 +14,15 @@ export { useEditableCell } from './hooks/use-editable-cell'
 export { TableService } from './services/table-service'
 
 // Utils
-export {
-  getInputType,
-  formatValue,
-  parseInputValue,
-} from './utils/data-formatting'
+export { getInputType, formatValue, parseInputValue } from './utils/data-formatting'
 
 // Types
 export type {
-  Column,
-  TableRecord,
-  UpdatePayload,
-  SortDirection,
-  SortConfig,
-  PaginationConfig,
-  DataType,
-} from './types' 
+	Column,
+	TableRecord,
+	UpdatePayload,
+	SortDirection,
+	SortConfig,
+	PaginationConfig,
+	DataType
+} from './types'
