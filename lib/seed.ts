@@ -1,4 +1,4 @@
-import { getNeonDb, getSqliteDb } from './db.ts'
+import { getNeonDb, getSqliteDb } from './db'
 import * as pgSchema from './schema/postgres'
 import * as sqliteSchema from './schema/sqlite'
 
@@ -139,8 +139,8 @@ export async function seedSqliteDb() {
 
 		console.log('SQLite database seeded successfully!')
 		return true
-	} catch (_error) {
-		console.error('Error seeding SQLite database:', _error)
+	} catch {
+		console.error('Error seeding SQLite database:')
 		return false
 	}
 }
@@ -153,7 +153,7 @@ export async function seedNeonDb() {
 		// Check if the database has the required schema
 		try {
 			await db.select().from(pgSchema.users).limit(1)
-		} catch (error) {
+		} catch (err) {
 			console.error(
 				"Error: Tables don't exist in Neon database. Please run migrations first."
 			)
@@ -231,8 +231,8 @@ export async function seedNeonDb() {
 
 		console.log('Neon database seeded successfully!')
 		return true
-	} catch (_error) {
-		console.error('Error seeding Neon database:', _error)
+	} catch (err) {
+		console.error('Error seeding Neon database:', err)
 		return false
 	}
 }

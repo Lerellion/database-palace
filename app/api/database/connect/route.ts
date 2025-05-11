@@ -1,59 +1,40 @@
-import { sql } from 'drizzle-orm'
-import { drizzle } from 'drizzle-orm/postgres-js'
 import { NextResponse } from 'next/server'
-import postgres from 'postgres'
 import { dbService } from '@/lib/services/database'
 
 export async function POST(request: Request) {
 	try {
 		const body = await request.json()
-		const { url, sslEnabled, sslCertPath } = body
+		const { type, url, fields } = body
 
-		if (!url) {
-			return NextResponse.json({ error: 'Database URL is required' }, { status: 400 })
+		if (!type || (type === 'url' && !url) || (type === 'fields' && !fields)) {
+			return NextResponse.json(
+				{ error: 'Invalid connection configuration' },
+				{ status: 400 }
+			)
 		}
 
-		// Validate URL format
-		try {
-			new URL(url)
-		} catch {
-			return NextResponse.json({ error: 'Invalid database URL format' }, { status: 400 })
-		}
-
-		// Connection configuration
-		const config: any = {
-			max: 1, // Use minimal pool for testing connection
-			idle_timeout: 5, // Short idle timeout
-			connect_timeout: 10
-		}
-
-		// Add SSL configuration if enabled
-		if (sslEnabled) {
-			config.ssl = {
-				rejectUnauthorized: false,
-				ca: sslCertPath ? [require('fs').readFileSync(sslCertPath)] : undefined
-			}
+		const connectionConfig = {
+			type,
+			name: type === 'url' ? 'URL Connection' : `${fields.database} on ${fields.host}`,
+			...(type === 'url' ? { url } : { fields })
 		}
 
 		// Test the connection
-		const client = postgres(url, config)
+		await dbService.connect(connectionConfig)
 
-		try {
-			// Try a simple query to verify connection
-			await client`SELECT 1`
+		// Get tables
+		const tables = await dbService.getTables(
+			type === 'fields' ? fields.schema : 'public'
+		)
 
-			// Store the connection details in the session or environment
-			// This is where you'd implement your connection storage logic
-			// For example, you could store it in a server-side session or a secure cookie
+		// Close the connection
+		await dbService.disconnect()
 
-			return NextResponse.json({
-				message: 'Successfully connected to database',
-				connected: true
-			})
-		} finally {
-			// Always close the test connection
-			await client.end()
-		}
+		return NextResponse.json({
+			message: 'Successfully connected to database',
+			connected: true,
+			tables
+		})
 	} catch (error) {
 		console.error('Database connection error:', error)
 		return NextResponse.json(

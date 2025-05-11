@@ -18,10 +18,10 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { toast } from '@/components/ui/use-toast'
 
 import { MoreHorizontal, Pencil, Trash } from 'lucide-react'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 import { RecordForm } from './record-form'
 
@@ -59,18 +59,15 @@ export function RecordActions({ tableName, record, columns, onAction }: RecordAc
 				throw new Error(error.message || 'Failed to delete record')
 			}
 
-			toast({
-				title: 'Record deleted',
+			toast.success('Record deleted', {
 				description: 'The record has been successfully deleted'
 			})
 
 			onAction()
 		} catch (error) {
 			console.error('Error deleting record:', error)
-			toast({
-				title: 'Error deleting record',
-				description: error instanceof Error ? error.message : 'Failed to delete record',
-				variant: 'destructive'
+			toast.error('Error deleting record', {
+				description: error instanceof Error ? error.message : 'Failed to delete record'
 			})
 		} finally {
 			setLoading(false)

@@ -4,10 +4,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
-import { toast } from '@/components/ui/use-toast'
 
 import type React from 'react'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 type Column = {
 	name: string
@@ -55,18 +55,13 @@ export function RecordForm({
 				throw new Error(error.message || 'Failed to save record')
 			}
 
-			toast({
-				title: `Record ${initialData ? 'updated' : 'created'} successfully`,
-				description: `The record has been ${initialData ? 'updated' : 'added'} to ${tableName}`
-			})
+			toast.success(`Record ${initialData ? 'updated' : 'created'} successfully`)
 
 			onSuccess()
 		} catch (error) {
 			console.error('Error saving record:', error)
-			toast({
-				title: 'Error saving record',
-				description: error instanceof Error ? error.message : 'Failed to save record',
-				variant: 'destructive'
+			toast.error('Error saving record', {
+				description: error instanceof Error ? error.message : 'Failed to save record'
 			})
 		} finally {
 			setLoading(false)

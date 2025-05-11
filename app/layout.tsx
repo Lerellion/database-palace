@@ -1,8 +1,8 @@
 import { PrimaryNav } from '@/components/primary-nav'
-import { Toaster } from '@/components/ui/toaster'
 
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { Toaster } from 'sonner'
 
 import './globals.css'
 

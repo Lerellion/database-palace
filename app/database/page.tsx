@@ -13,11 +13,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { toast } from '@/components/ui/use-toast'
 
 import { Database, Link as LinkIcon, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 export default function DatabasePage() {
 	const router = useRouter()
@@ -50,32 +50,33 @@ export default function DatabasePage() {
 
 		setIsConnecting(true)
 		try {
-			// Try to connect
-			await dbService.connect(connectionConfig)
+			const response = await fetch('/api/database/connect', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(connectionConfig)
+			})
 
-			// Get tables for the connected database
-			const tables = await dbService.getTables(connectionConfig.fields?.schema || 'public')
+			const data = await response.json()
+
+			if (!response.ok) {
+				throw new Error(data.error || 'Failed to connect to database')
+			}
 
 			// Update stores
 			setActiveConnection(connectionConfig)
 			setConnectionStatus(true)
-			setTables(tables)
+			setTables(data.tables)
 			addConnection(connectionConfig)
 
-			// Navigate to tables view
-			router.push('/tables')
+			router.push('/database/tables')
 
-			toast({
-				title: 'Connected successfully',
-				description: `Connected to ${connectionConfig.name}`
-			})
+			toast.success(`Connected to ${connectionConfig.name}`)
 		} catch (error) {
 			console.error('Connection error:', error)
-			toast({
-				title: 'Connection failed',
-				description:
-					error instanceof Error ? error.message : 'Failed to connect to database',
-				variant: 'destructive'
+			toast.error('Connection failed', {
+				description: error instanceof Error ? error.message : 'Failed to connect to database'
 			})
 		} finally {
 			setIsConnecting(false)
@@ -101,18 +102,26 @@ export default function DatabasePage() {
 		}
 
 		try {
-			await dbService.connect(connectionConfig)
-			await dbService.disconnect()
-			toast({
-				title: 'Test successful',
+			const response = await fetch('/api/database/connect', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(connectionConfig)
+			})
+
+			const data = await response.json()
+
+			if (!response.ok) {
+				throw new Error(data.error || 'Failed to connect to database')
+			}
+
+			toast.success('Test successful', {
 				description: 'Successfully connected to the database'
 			})
 		} catch (error) {
-			toast({
-				title: 'Test failed',
-				description:
-					error instanceof Error ? error.message : 'Failed to connect to database',
-				variant: 'destructive'
+			toast.error('Test failed', {
+				description: error instanceof Error ? error.message : 'Failed to connect to database'
 			})
 		}
 	}

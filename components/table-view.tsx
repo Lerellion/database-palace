@@ -24,11 +24,11 @@ import {
 	TableHeader,
 	TableRow
 } from '@/components/ui/table'
-import { toast } from '@/components/ui/use-toast'
 
 import { ArrowDown, ArrowUp, Database, Loader2, Plus, Search, TableProperties } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 import { RecordActions } from './record-actions'
 import { RecordForm } from './record-form'
@@ -81,10 +81,8 @@ export function TableView() {
 		} catch (error) {
 			console.error(`Failed to fetch data for table ${tableName}:`, error)
 			setError(error instanceof Error ? error.message : 'Failed to load table data')
-			toast({
-				title: 'Error loading data',
-				description: error instanceof Error ? error.message : 'Failed to load table data',
-				variant: 'destructive'
+			toast.error('Error loading data', {
+				description: error instanceof Error ? error.message : 'Failed to load table data'
 			})
 		} finally {
 			setLoading(false)

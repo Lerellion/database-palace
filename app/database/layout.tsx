@@ -2,18 +2,9 @@
 
 import { cn } from '@/lib/utils'
 
-import {
-	Activity,
-	Database,
-	FileCode,
-	Layers,
-	Lock,
-	Settings,
-	Terminal
-} from 'lucide-react'
+import { Activity, Database, FileCode, Layers, Lock, Settings, Terminal } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Sidebar } from '@/components/sidebar'
 
 const navigation = [
 	{
