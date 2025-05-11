@@ -1,10 +1,11 @@
-import { sql } from 'drizzle-orm'
+import { asc, desc, eq, sql } from 'drizzle-orm'
+import { PgColumn } from 'drizzle-orm/pg-core'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import { Pool } from 'pg'
-import postgres from 'postgres'
+import postgres, { Options } from 'postgres'
 
 import * as schema from '../schema/postgres'
-import { ConnectionConfig } from '../store/connection-store'
+import { ConnectionConfig } from '@/state/'
 
 // Database connection configuration
 function getDatabaseConfig() {
@@ -23,7 +24,7 @@ function getDatabaseConfig() {
 	const sslEnabled = process.env.DB_SSL_ENABLED === 'true' || isCloudProvider
 	const sslCA = process.env.DB_SSL_CA
 
-	const config: any = {
+	const config: unknown = {
 		max: 10, // Maximum pool size
 		idle_timeout: 20, // Max idle time in seconds
 		connect_timeout: 10 // Connection timeout in seconds
@@ -31,7 +32,7 @@ function getDatabaseConfig() {
 
 	// Add SSL configuration if needed
 	if (sslEnabled) {
-		config.ssl = {
+		;(config as unknown as { ssl: { rejectUnauthorized: boolean; ca?: string[] } }).ssl = {
 			rejectUnauthorized: false, // Set to true in production with proper certificates
 			ca: sslCA ? [require('fs').readFileSync(sslCA)] : undefined
 		}
@@ -44,7 +45,7 @@ function getDatabaseConfig() {
 const { url: databaseUrl, config } = getDatabaseConfig()
 
 // Create postgres client with configuration
-const client = postgres(databaseUrl, config)
+const client = postgres(databaseUrl, config as unknown as Options<{}>)
 
 // Create drizzle database instance
 export const db = drizzle(client, { schema })
@@ -56,7 +57,7 @@ type PaginationParams = {
 	limit?: number
 	orderBy?: string
 	orderDirection?: 'asc' | 'desc'
-	filters?: Record<string, any>
+	filters?: Record<string, unknown>
 }
 
 type PaginationResult = {
@@ -71,7 +72,7 @@ type FetchResult<T> = {
 	pagination: PaginationResult
 }
 
-function isTableColumn(table: any, key: string) {
+function isTableColumn(table: unknown, key: string) {
 	return table && typeof table === 'object' && key in table && 'name' in table[key]
 }
 
@@ -93,28 +94,25 @@ export async function fetchTableData<T>({
 	}
 
 	try {
-		// Build the query
 		let baseQuery = db.select().from(table)
 
-		// Apply filters
-		Object.entries(filters).forEach(([key, value]) => {
+		for (const [key, value] of Object.entries(filters)) {
 			if (value !== undefined && value !== null && isTableColumn(table, key)) {
-				baseQuery = baseQuery.where(sql`${table[key]} = ${value}`)
+				const column = table[key] as PgColumn
+				baseQuery = baseQuery.where(eq(column, value)) as typeof baseQuery
 			}
-		})
-
-		// Apply ordering
-		if (orderBy && isTableColumn(table, orderBy)) {
-			baseQuery = baseQuery.orderBy(sql`${table[orderBy]}`, sql`${orderDirection}`)
 		}
 
-		// Apply pagination
+		if (orderBy && isTableColumn(table, orderBy)) {
+			const column = table[orderBy] as PgColumn
+			const direction = orderDirection === 'desc' ? desc(column) : asc(column)
+			baseQuery = baseQuery.orderBy(direction) as typeof baseQuery
+		}
+
 		const query = baseQuery.limit(limit).offset(offset)
 
-		// Execute query
 		const results = await query
 
-		// Get total count
 		const [totalCount] = await db.select({ count: sql`count(*)` }).from(table)
 
 		return {
@@ -204,14 +202,13 @@ class DatabaseService {
 			this.pool = new Pool({
 				connectionString: dbConfig.connectionString,
 				ssl: dbConfig.ssl,
-				...dbConfig.pool,
-				// Add connection error handler
-				on: {
-					error: (err, client) => {
-						console.error('Unexpected error on idle client', err)
-						if (client) client.release(true) // Force release with error
-					}
-				}
+				...dbConfig.pool
+			})
+
+			// Add error handler after pool creation
+			this.pool.on('error', (err, client) => {
+				console.error('Unexpected error on idle client', err)
+				if (client) client.release(true)
 			})
 
 			// Test the connection
