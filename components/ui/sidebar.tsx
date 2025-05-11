@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@/lib/utils'
+import { cn } from 'helpers'
 import { useIsMobile } from '@/hooks/use-mobile'
 
 import { Button } from '@/components/ui/button'

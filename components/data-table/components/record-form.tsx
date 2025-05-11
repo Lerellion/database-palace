@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@/lib/utils'
+import { cn } from 'helpers'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'

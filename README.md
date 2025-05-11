@@ -23,9 +23,7 @@ Inspired by Drizzle studio, Prisma studio and Outerbase. Aiming to not only be a
 - And more!
 
 ## License
-
 MIT License
 
 xxx,
-
 remco stoeten
