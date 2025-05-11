@@ -153,7 +153,7 @@ export async function seedNeonDb() {
 		// Check if the database has the required schema
 		try {
 			await db.select().from(pgSchema.users).limit(1)
-		} catch (err) {
+		} catch {
 			console.error(
 				"Error: Tables don't exist in Neon database. Please run migrations first."
 			)

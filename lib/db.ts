@@ -26,4 +26,4 @@ export function getSqliteDb() {
 
 export function initSqliteDb(db: ReturnType<typeof drizzle>) {
 	sqliteDb = db
-} 
+}

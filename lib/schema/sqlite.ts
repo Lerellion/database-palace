@@ -48,4 +48,4 @@ export const orderItems = sqliteTable('order_items', {
 		.references(() => products.id),
 	quantity: integer('quantity').notNull(),
 	price: real('price').notNull()
-}) 
+})
