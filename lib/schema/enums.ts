@@ -11,8 +11,7 @@ export const orderStatusEnum = pgEnum('order_status', [
 	'pending',
 	'processing',
 	'shipped',
-	'delivered',
-	'cancelled'
+	'delivered'
 ])
 export const ORDER_STATUS_VALUES: OrderStatusEnum[] = [
 	'pending',

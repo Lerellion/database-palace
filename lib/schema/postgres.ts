@@ -2,6 +2,7 @@ import {
 	boolean,
 	decimal,
 	integer,
+	pgEnum,
 	pgTable,
 	serial,
 	text,
@@ -59,4 +60,4 @@ export const orderItems = pgTable('order_items', {
 	price: decimal('price', { precision: 10, scale: 2 }).notNull()
 })
 
-const _roleEnum = pgEnum('role', ['admin', 'user'])
+export const roleEnum = pgEnum('role', ['admin', 'user'])
