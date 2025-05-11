@@ -1,7 +1,21 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { Button } from '@/components/ui/button'
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue
+} from '@/components/ui/select'
 import {
 	Table,
 	TableBody,
@@ -10,30 +24,18 @@ import {
 	TableHeader,
 	TableRow
 } from '@/components/ui/table'
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue
-} from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger
-} from '@/components/ui/dialog'
-import { ArrowDown, ArrowUp, Plus, Search, Loader2, Database, TableProperties } from 'lucide-react'
+import { toast } from '@/components/ui/use-toast'
+
+import { ArrowDown, ArrowUp, Database, Loader2, Plus, Search, TableProperties } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+
 import { RecordActions } from './record-actions'
 import { RecordForm } from './record-form'
-import { toast } from '@/components/ui/use-toast'
 
 type SortDirection = 'asc' | 'desc'
 
-interface Column {
+type Column = {
 	name: string
 	type: string
 	isPrimaryKey?: boolean

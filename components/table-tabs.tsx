@@ -1,10 +1,11 @@
 'use client'
 
-import { useRouter, useSearchParams } from 'next/navigation'
-import { X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+
 import { cn } from 'helpers'
-import { useState, useEffect } from 'react'
+import { X } from 'lucide-react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 type TTab = {
 	table: string

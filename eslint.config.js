@@ -6,6 +6,14 @@ import importPlugin from 'eslint-plugin-import'
 
 export default [
 	{
+		ignores: [
+			'.next/**/*',
+			'node_modules/**/*',
+			'dist/**/*',
+			'build/**/*'
+		]
+	},
+	{
 		files: ['**/*.ts', '**/*.tsx'],
 		languageOptions: {
 			parser: tsParser,
@@ -32,11 +40,17 @@ export default [
 				trailingComma: 'none',
 				endOfLine: 'auto'
 			}],
-			'@typescript-eslint/no-unused-vars': 'error',
+			'@typescript-eslint/no-unused-vars': ['error', {
+				argsIgnorePattern: '^_',
+				varsIgnorePattern: '^_'
+			}],
 			'@typescript-eslint/explicit-function-return-type': 'off',
 			'@typescript-eslint/interface-name-prefix': 'off',
 			'@typescript-eslint/explicit-module-boundary-types': 'off',
-			'@typescript-eslint/no-explicit-any': 'warn',
+			'@typescript-eslint/no-explicit-any': ['warn', {
+				fixToUnknown: false,
+				ignoreRestArgs: true
+			}],
 			'@typescript-eslint/consistent-type-definitions': ['error', 'type'],
 			'simple-import-sort/imports': ['error', {
 				groups: [

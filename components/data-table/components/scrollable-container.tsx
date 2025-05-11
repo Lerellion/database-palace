@@ -1,13 +1,14 @@
 'use client'
 
 import { cn } from '@/lib/utils'
+
 import React from 'react'
 
-interface ScrollableContainerProps extends React.HTMLAttributes<HTMLDivElement> {
+type ScrollableContainerProps = {
 	maxHeight?: string | number
 	className?: string
 	children: React.ReactNode
-}
+} & React.HTMLAttributes<HTMLDivElement>
 
 export function ScrollableContainer({
 	maxHeight = '80vh',

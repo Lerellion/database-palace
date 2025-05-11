@@ -1,22 +1,22 @@
 'use client'
 
-import type React from 'react'
-
-import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { toast } from '@/components/ui/use-toast'
 
-interface Column {
+import type React from 'react'
+import { useState } from 'react'
+
+type Column = {
 	name: string
 	type: string
 	isPrimaryKey?: boolean
 	isNotNull?: boolean
 }
 
-interface RecordFormProps {
+type RecordFormProps = {
 	tableName: string
 	columns: Column[]
 	initialData?: Record<string, any>

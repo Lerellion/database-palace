@@ -1,8 +1,9 @@
-import { drizzle } from 'drizzle-orm/postgres-js'
 import { sql } from 'drizzle-orm'
-import postgres from 'postgres'
-import * as schema from '../schema/postgres'
+import { drizzle } from 'drizzle-orm/postgres-js'
 import { Pool } from 'pg'
+import postgres from 'postgres'
+
+import * as schema from '../schema/postgres'
 import { ConnectionConfig } from '../store/connection-store'
 
 // Database connection configuration
@@ -50,7 +51,7 @@ export const db = drizzle(client, { schema })
 
 export type TableName = keyof typeof schema
 
-interface PaginationParams {
+type PaginationParams = {
 	page?: number
 	limit?: number
 	orderBy?: string
@@ -58,14 +59,14 @@ interface PaginationParams {
 	filters?: Record<string, any>
 }
 
-interface PaginationResult {
+type PaginationResult = {
 	page: number
 	limit: number
 	total: number
 	totalPages: number
 }
 
-interface FetchResult<T> {
+type FetchResult<T> = {
 	data: T[]
 	pagination: PaginationResult
 }
@@ -131,7 +132,7 @@ export async function fetchTableData<T>({
 	}
 }
 
-interface DatabaseConfig {
+type DatabaseConfig = {
 	connectionString: string
 	ssl?: {
 		rejectUnauthorized: boolean

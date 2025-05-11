@@ -1,11 +1,13 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
 import { toast } from '@/components/ui/use-toast'
+
+import { useCallback, useEffect, useState } from 'react'
+
 import { TableService } from '../services/table-service'
 import { Column, TableRecord } from '../types'
 
-interface IUseEditableCellProps {
+type IUseEditableCellProps = {
 	initialValue: any
 	column: Column
 	tableName: string
@@ -13,7 +15,7 @@ interface IUseEditableCellProps {
 	onUpdate: () => void
 }
 
-interface IUseEditableCellReturn {
+type IUseEditableCellReturn = {
 	value: any
 	isEditing: boolean
 	loading: boolean

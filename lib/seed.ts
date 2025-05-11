@@ -1,6 +1,6 @@
-import { getSqliteDb, getNeonDb } from './db.ts'
-import * as sqliteSchema from './schema/sqlite'
+import { getNeonDb, getSqliteDb } from './db.ts'
 import * as pgSchema from './schema/postgres'
+import * as sqliteSchema from './schema/sqlite'
 
 // Sample data
 const sampleUsers = [
@@ -139,8 +139,8 @@ export async function seedSqliteDb() {
 
 		console.log('SQLite database seeded successfully!')
 		return true
-	} catch (error) {
-		console.error('Error seeding SQLite database:', error)
+	} catch (_error) {
+		console.error('Error seeding SQLite database:', _error)
 		return false
 	}
 }
@@ -231,8 +231,8 @@ export async function seedNeonDb() {
 
 		console.log('Neon database seeded successfully!')
 		return true
-	} catch (error) {
-		console.error('Error seeding Neon database:', error)
+	} catch (_error) {
+		console.error('Error seeding Neon database:', _error)
 		return false
 	}
 }

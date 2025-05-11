@@ -1,6 +1,7 @@
-import { NextResponse } from 'next/server'
 import { db } from '@/lib/services/database'
+
 import { sql } from 'drizzle-orm'
+import { NextResponse } from 'next/server'
 
 export async function GET() {
 	try {

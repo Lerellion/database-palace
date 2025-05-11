@@ -1,18 +1,19 @@
 'use client'
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+
 import {
-	Database,
-	Table,
-	KeyRound,
-	Settings,
 	BarChart,
+	Database,
 	FileCode,
 	Grid,
+	KeyRound,
+	Settings,
+	Table,
 	Terminal
 } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const navigation = [
 	{ name: 'Dashboard', href: '/', icon: Grid },

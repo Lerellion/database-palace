@@ -1,14 +1,15 @@
 'use client'
 
 import { useState } from 'react'
+
 import { Button } from './button'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './card'
 import { Input } from './input'
 import { Label } from './label'
 import { Switch } from './switch'
 import { toast } from './use-toast'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './card'
 
-interface ConnectionFormData {
+type ConnectionFormData = {
 	url: string
 	sslEnabled: boolean
 	sslCertPath?: string

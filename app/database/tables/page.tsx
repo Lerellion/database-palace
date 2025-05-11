@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { TableIcon, PlusIcon, SearchIcon } from 'lucide-react'
+
+import { PlusIcon, SearchIcon, TableIcon } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 type TProps = {
 	name: string

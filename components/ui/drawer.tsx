@@ -1,9 +1,9 @@
 'use client'
 
+import { cn } from '@/lib/utils'
+
 import * as React from 'react'
 import { Drawer as DrawerPrimitive } from 'vaul'
-
-import { cn } from '@/lib/utils'
 
 const Drawer = ({
 	shouldScaleBackground = true,
@@ -88,13 +88,13 @@ DrawerDescription.displayName = DrawerPrimitive.Description.displayName
 
 export {
 	Drawer,
-	DrawerPortal,
-	DrawerOverlay,
-	DrawerTrigger,
 	DrawerClose,
 	DrawerContent,
-	DrawerHeader,
+	DrawerDescription,
 	DrawerFooter,
+	DrawerHeader,
+	DrawerOverlay,
+	DrawerPortal,
 	DrawerTitle,
-	DrawerDescription
+	DrawerTrigger
 }

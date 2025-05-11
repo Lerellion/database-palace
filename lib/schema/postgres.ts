@@ -1,14 +1,15 @@
 import {
+	boolean,
+	decimal,
+	integer,
 	pgTable,
 	serial,
 	text,
-	varchar,
 	timestamp,
-	integer,
-	decimal,
-	boolean
+	varchar
 } from 'drizzle-orm/pg-core'
-import { roleEnum, orderStatusEnum } from './enums'
+
+import { orderStatusEnum } from './enums'
 
 // Users table
 export const users = pgTable('users', {
@@ -57,3 +58,5 @@ export const orderItems = pgTable('order_items', {
 	quantity: integer('quantity').notNull(),
 	price: decimal('price', { precision: 10, scale: 2 }).notNull()
 })
+
+const _roleEnum = pgEnum('role', ['admin', 'user'])

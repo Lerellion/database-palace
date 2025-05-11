@@ -1,21 +1,23 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { dbService } from '@/lib/services/database'
+import {
+	type ConnectionConfig,
+	type ConnectionType,
+	useConnectionStore
+} from '@/lib/store/connection-store'
+import { useHistoryStore } from '@/lib/store/history-store'
+
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Database, Power, Link as LinkIcon, Trash2 } from 'lucide-react'
-import {
-	useConnectionStore,
-	type ConnectionConfig,
-	type ConnectionType
-} from '@/lib/store/connection-store'
-import { useHistoryStore } from '@/lib/store/history-store'
-import { dbService } from '@/lib/services/database'
 import { toast } from '@/components/ui/use-toast'
+
+import { Database, Link as LinkIcon, Trash2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export default function DatabasePage() {
 	const router = useRouter()

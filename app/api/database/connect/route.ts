@@ -1,7 +1,8 @@
+import { sql } from 'drizzle-orm'
+import { drizzle } from 'drizzle-orm/postgres-js'
 import { NextResponse } from 'next/server'
 import postgres from 'postgres'
-import { drizzle } from 'drizzle-orm/postgres-js'
-import { sql } from 'drizzle-orm'
+import { dbService } from '@/lib/services/database'
 
 export async function POST(request: Request) {
 	try {

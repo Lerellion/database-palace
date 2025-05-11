@@ -1,4 +1,4 @@
-export interface Column {
+export type Column = {
 	name: string
 	type: string
 	isPrimaryKey?: boolean
@@ -9,24 +9,24 @@ export interface Column {
 	scale?: number
 }
 
-export interface TableRecord {
+export type TableRecord = {
 	[key: string]: any
 	id: string | number
 }
 
-export interface UpdatePayload {
+export type UpdatePayload = {
 	data: Partial<TableRecord>
 	where: Partial<TableRecord>
 }
 
 export type SortDirection = 'asc' | 'desc'
 
-export interface SortConfig {
+export type SortConfig = {
 	column: string | null
 	direction: SortDirection
 }
 
-export interface PaginationConfig {
+export type PaginationConfig = {
 	page: number
 	limit: number
 	total: number

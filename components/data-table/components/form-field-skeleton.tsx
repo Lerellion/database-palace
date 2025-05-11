@@ -1,10 +1,11 @@
 'use client'
 
 import { cn } from '@/lib/utils'
+
 import { Column } from '../types'
 import { getInputType } from '../utils/data-formatting'
 
-interface FormFieldSkeletonProps {
+type FormFieldSkeletonProps = {
 	column: Column
 	className?: string
 }

@@ -1,11 +1,12 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
+
 import { Column } from '../types'
 import { FormFieldSkeleton } from './form-field-skeleton'
-import { Button } from '@/components/ui/button'
 import { ScrollableContainer } from './scrollable-container'
 
-interface RecordFormSkeletonProps {
+type RecordFormSkeletonProps = {
 	columns: Column[]
 }
 

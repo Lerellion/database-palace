@@ -1,15 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-import { MoreHorizontal, Pencil, Trash } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -20,17 +10,29 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle
 } from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import { toast } from '@/components/ui/use-toast'
+
+import { MoreHorizontal, Pencil, Trash } from 'lucide-react'
+import { useState } from 'react'
+
 import { RecordForm } from './record-form'
 
-interface Column {
+type Column = {
 	name: string
 	type: string
 	isPrimaryKey?: boolean
 	isNotNull?: boolean
 }
 
-interface RecordActionsProps {
+type RecordActionsProps = {
 	tableName: string
 	record: Record<string, any>
 	columns: Column[]

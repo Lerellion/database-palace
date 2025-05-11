@@ -1,6 +1,7 @@
-import { NextResponse } from 'next/server'
 import { db } from '@/lib/services/database'
+
 import { sql } from 'drizzle-orm'
+import { NextResponse } from 'next/server'
 
 // Validate table name against SQL injection and invalid characters
 function isValidTableName(name: string): boolean {
@@ -47,7 +48,7 @@ function validateValue(value: any, type: string): { valid: boolean; value: any }
 	}
 }
 
-interface ColumnInfo {
+type ColumnInfo = {
 	column_name: string
 	data_type: string
 	isNotNull: boolean

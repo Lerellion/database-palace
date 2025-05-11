@@ -1,8 +1,8 @@
-import { CellSkeleton } from './cell-skeleton'
 import { Column } from '../types'
 import { getInputType } from '../utils/data-formatting'
+import { CellSkeleton } from './cell-skeleton'
 
-interface EditableCellSkeletonProps {
+type EditableCellSkeletonProps = {
 	column: Column
 }
 

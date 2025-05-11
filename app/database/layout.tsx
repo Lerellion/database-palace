@@ -1,18 +1,19 @@
 'use client'
 
+import { cn } from '@/lib/utils'
+
 import {
-	Database,
 	Activity,
-	Shield,
-	Settings,
+	Database,
+	FileCode,
 	Layers,
-	Terminal,
 	Lock,
-	FileCode
+	Settings,
+	Terminal
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { cn } from '@/lib/utils'
+import { Sidebar } from '@/components/sidebar'
 
 const navigation = [
 	{

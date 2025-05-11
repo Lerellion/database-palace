@@ -1,6 +1,7 @@
+import dotenv from 'dotenv'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
-import dotenv from 'dotenv'
+
 import * as schema from '../lib/schema/postgres'
 
 // Load environment variables

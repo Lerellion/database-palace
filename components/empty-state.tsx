@@ -1,7 +1,8 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { PlusCircle, Upload, Table, FileDown } from 'lucide-react'
+
+import { FileDown, PlusCircle, Table, Upload } from 'lucide-react'
 
 export function EmptyState() {
 	return (

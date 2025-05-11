@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import type { TableName } from '@/lib/services/database'
 
-interface PaginationParams {
+import { useEffect, useState } from 'react'
+
+type PaginationParams = {
 	page?: number
 	limit?: number
 	orderBy?: string
@@ -11,14 +12,14 @@ interface PaginationParams {
 	filters?: Record<string, any>
 }
 
-interface PaginationResult {
+type PaginationResult = {
 	page: number
 	limit: number
 	total: number
 	totalPages: number
 }
 
-interface FetchResult<T> {
+type FetchResult<T> = {
 	data: T[]
 	pagination: PaginationResult
 }

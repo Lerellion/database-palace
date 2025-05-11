@@ -2,7 +2,7 @@
 
 import { TableRecord, UpdatePayload } from '../types'
 
-interface ApiError {
+type ApiError = {
 	message: string
 	code?: string
 	details?: unknown

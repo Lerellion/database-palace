@@ -1,8 +1,9 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+
 import { ConnectionConfig } from './connection-store'
 
-interface HistoryState {
+type HistoryState = {
 	connections: ConnectionConfig[]
 	addConnection: (connection: ConnectionConfig) => void
 	removeConnection: (connection: ConnectionConfig) => void

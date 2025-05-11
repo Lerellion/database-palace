@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
 
-interface CellSkeletonProps {
+type CellSkeletonProps = {
 	className?: string
 	type?: 'text' | 'boolean' | 'number' | 'date'
 }

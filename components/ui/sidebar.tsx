@@ -1,31 +1,33 @@
 'use client'
 
-import * as React from 'react'
-import { Slot } from '@radix-ui/react-slot'
-import { VariantProps, cva } from 'class-variance-authority'
-import { PanelLeft } from 'lucide-react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import {
-	TableIcon,
-	DatabaseIcon,
-	BarChartIcon,
-	AlertTriangleIcon,
-	SettingsIcon,
-	KeyIcon,
-	ShieldIcon,
-	ActivityIcon,
-	LayersIcon
-} from 'lucide-react'
-
-import { useIsMobile } from '@/hooks/use-mobile'
 import { cn } from '@/lib/utils'
+import { useIsMobile } from '@/hooks/use-mobile'
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+
+import { cva, VariantProps } from 'class-variance-authority'
+import {
+	ActivityIcon,
+	AlertTriangleIcon,
+	BarChartIcon,
+	DatabaseIcon,
+	KeyIcon,
+	LayersIcon,
+	PanelLeft,
+	SettingsIcon,
+	ShieldIcon,
+	TableIcon
+} from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import * as React from 'react'
+
+import { Slot } from '@radix-ui/react-slot'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar:state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -794,7 +796,7 @@ const SidebarMenuSubButton = React.forwardRef<
 })
 SidebarMenuSubButton.displayName = 'SidebarMenuSubButton'
 
-interface SidebarItemProps {
+type SidebarItemProps = {
 	icon: React.ReactNode
 	label: string
 	href: string
@@ -815,7 +817,7 @@ function SidebarItem({ icon, label, href, isActive }: SidebarItemProps) {
 	)
 }
 
-interface SidebarSectionProps {
+type SidebarSectionProps = {
 	title: string
 	children: React.ReactNode
 }

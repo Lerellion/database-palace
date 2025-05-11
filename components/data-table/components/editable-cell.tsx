@@ -1,12 +1,14 @@
 'use client'
 
-import { useRef, useEffect, Suspense } from 'react'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
+
 import { Loader2 } from 'lucide-react'
+import { Suspense, useEffect, useRef } from 'react'
+
 import { useEditableCell } from '../hooks/use-editable-cell'
-import { getInputType, formatValue, parseInputValue } from '../utils/data-formatting'
 import { Column, TableRecord } from '../types'
+import { formatValue, getInputType, parseInputValue } from '../utils/data-formatting'
 import { EditableCellSkeleton } from './editable-cell-skeleton'
 
 type TProps = {

@@ -2,7 +2,7 @@ import { create } from 'zustand'
 
 export type ConnectionType = 'url' | 'fields'
 
-export interface ConnectionConfig {
+export type ConnectionConfig = {
 	type: ConnectionType
 	url?: string
 	fields?: {
@@ -16,7 +16,7 @@ export interface ConnectionConfig {
 	name: string
 }
 
-interface ConnectionState {
+type ConnectionState = {
 	activeConnection: ConnectionConfig | null
 	isConnected: boolean
 	tables: string[]

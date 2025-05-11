@@ -1,17 +1,18 @@
-import { useState, useEffect, useRef } from 'react'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { toast } from '@/components/ui/use-toast'
-import { Loader2 } from 'lucide-react'
 
-interface Column {
+import { Loader2 } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+
+type Column = {
 	name: string
 	type: string
 	isPrimaryKey?: boolean
 	isNotNull?: boolean
 }
 
-interface EditableCellProps {
+type EditableCellProps = {
 	value: any
 	column: Column
 	tableName: string

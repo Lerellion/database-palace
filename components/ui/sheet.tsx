@@ -1,11 +1,12 @@
 'use client'
 
-import * as React from 'react'
-import * as SheetPrimitive from '@radix-ui/react-dialog'
+import { cn } from '@/lib/utils'
+
 import { cva, type VariantProps } from 'class-variance-authority'
 import { X } from 'lucide-react'
+import * as React from 'react'
 
-import { cn } from '@/lib/utils'
+import * as SheetPrimitive from '@radix-ui/react-dialog'
 
 const Sheet = SheetPrimitive.Root
 
@@ -47,9 +48,8 @@ const sheetVariants = cva(
 	}
 )
 
-interface SheetContentProps
-	extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
-		VariantProps<typeof sheetVariants> {}
+type SheetContentProps = {} & React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content> &
+	VariantProps<typeof sheetVariants>
 
 const SheetContent = React.forwardRef<
 	React.ElementRef<typeof SheetPrimitive.Content>,
@@ -111,13 +111,13 @@ SheetDescription.displayName = SheetPrimitive.Description.displayName
 
 export {
 	Sheet,
-	SheetPortal,
-	SheetOverlay,
-	SheetTrigger,
 	SheetClose,
 	SheetContent,
-	SheetHeader,
+	SheetDescription,
 	SheetFooter,
+	SheetHeader,
+	SheetOverlay,
+	SheetPortal,
 	SheetTitle,
-	SheetDescription
+	SheetTrigger
 }

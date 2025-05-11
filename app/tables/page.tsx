@@ -1,10 +1,12 @@
 'use client'
 
-import React from 'react'
-import { Button } from '@/components/ui/button'
-import { Database, ExternalLink } from 'lucide-react'
 import { cn } from '@/lib/utils'
+
+import { Button } from '@/components/ui/button'
+
+import { Database, ExternalLink } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import React from 'react'
 
 type TProps = {
 	variant: 'no-connection' | 'connecting' | 'no-tables'
