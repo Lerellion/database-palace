@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server'
 import { dbService } from '@/lib/services/database'
+
+import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
 	try {
@@ -7,10 +8,7 @@ export async function POST(request: Request) {
 		const { type, url, fields } = body
 
 		if (!type || (type === 'url' && !url) || (type === 'fields' && !fields)) {
-			return NextResponse.json(
-				{ error: 'Invalid connection configuration' },
-				{ status: 400 }
-			)
+			return NextResponse.json({ error: 'Invalid connection configuration' }, { status: 400 })
 		}
 
 		const connectionConfig = {
@@ -23,9 +21,7 @@ export async function POST(request: Request) {
 		await dbService.connect(connectionConfig)
 
 		// Get tables
-		const tables = await dbService.getTables(
-			type === 'fields' ? fields.schema : 'public'
-		)
+		const tables = await dbService.getTables(type === 'fields' ? fields.schema : 'public')
 
 		// Close the connection
 		await dbService.disconnect()

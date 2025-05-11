@@ -1,10 +1,12 @@
 import { PrimaryNav } from '@/components/primary-nav'
+import { TopNav } from '@/components/top-nav'
 
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Toaster } from 'sonner'
 
 import '../styles/globals.css'
+import '../styles/themes.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,15 +16,25 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-	return (
-		<html lang="en">
-			<body className={inter.className}>
-				<div className="flex h-screen bg-background text-foreground">
-					{/* Primary Navigation - fixed width */}
-					<PrimaryNav />
+	const defaultTheme = 'grey'
 
-					{/* Main Content Area - includes feature nav + content */}
-					<div className="flex-1 flex">{children}</div>
+	return (
+		<html lang="en" data-theme={defaultTheme}>
+			<head>
+				<link rel="icon" href="/favicon.ico" sizes="any" />
+				<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+				<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+				<meta name="theme-color" content="#020817" />
+				<meta name="apple-mobile-web-app-capable" content="yes" />
+				<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+			</head>
+			<body className={inter.className}>
+				<div className="flex h-screen flex-col bg-background text-foreground">
+					<TopNav />
+					<div className="flex flex-1">
+						<PrimaryNav />
+						<main className="flex flex-1 overflow-auto">{children}</main>
+					</div>
 				</div>
 				<Toaster />
 			</body>

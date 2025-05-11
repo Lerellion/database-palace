@@ -1,7 +1,6 @@
 'use client'
 
 import { cn } from 'helpers'
-
 import { Activity, Database, FileCode, Layers, Lock, Settings, Terminal } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'

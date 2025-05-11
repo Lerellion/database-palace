@@ -1,22 +1,17 @@
 'use client'
 
-import { Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+
+import { PreLoader } from '../components/effects/pre-loader'
 import { TableView } from '../components/table-view'
 
-function SearchParamsComponent() {
-	const searchParams = useSearchParams()
-	// Use searchParams here
-	return null
-}
+export default function Home() {
+	const [isLoading, setIsLoading] = useState(true)
 
-export default function SyntheticV0PageForDeployment() {
 	return (
-		<div>
-			<Suspense>
-				<SearchParamsComponent />
-			</Suspense>
+		<>
+			<PreLoader isLoading={isLoading} onLoadingComplete={() => setIsLoading(false)} />
 			<TableView />
-		</div>
+		</>
 	)
 }

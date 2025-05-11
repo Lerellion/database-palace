@@ -1,13 +1,5 @@
 'use client'
 
-import { dbService } from '@/lib/services/database'
-import {
-	type ConnectionConfig,
-	type ConnectionType,
-	useConnectionStore
-} from '@/lib/store/connection-store'
-import { useHistoryStore } from '@/lib/store/history-store'
-
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -18,6 +10,13 @@ import { Database, Link as LinkIcon, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
+
+import {
+	type ConnectionConfig,
+	type ConnectionType,
+	useConnectionStore,
+	useHistoryStore
+} from '@/state/'
 
 export default function DatabasePage() {
 	const router = useRouter()
@@ -64,7 +63,6 @@ export default function DatabasePage() {
 				throw new Error(data.error || 'Failed to connect to database')
 			}
 
-			// Update stores
 			setActiveConnection(connectionConfig)
 			setConnectionStatus(true)
 			setTables(data.tables)
@@ -76,7 +74,8 @@ export default function DatabasePage() {
 		} catch (error) {
 			console.error('Connection error:', error)
 			toast.error('Connection failed', {
-				description: error instanceof Error ? error.message : 'Failed to connect to database'
+				description:
+					error instanceof Error ? error.message : 'Failed to connect to database'
 			})
 		} finally {
 			setIsConnecting(false)
@@ -121,7 +120,8 @@ export default function DatabasePage() {
 			})
 		} catch (error) {
 			toast.error('Test failed', {
-				description: error instanceof Error ? error.message : 'Failed to connect to database'
+				description:
+					error instanceof Error ? error.message : 'Failed to connect to database'
 			})
 		}
 	}
@@ -129,12 +129,12 @@ export default function DatabasePage() {
 	return (
 		<div className="flex-1 p-6">
 			<div className="flex items-center justify-between mb-6">
-				<div>
+				<>
 					<h1 className="text-2xl font-semibold">Database Connection</h1>
 					<p className="text-sm text-muted-foreground">
 						Connect to your PostgreSQL database
 					</p>
-				</div>
+				</>
 			</div>
 
 			<Card>
@@ -267,12 +267,12 @@ export default function DatabasePage() {
 				<Card className="mt-6">
 					<CardHeader>
 						<div className="flex items-center justify-between">
-							<div>
+							<>
 								<CardTitle>Connection History</CardTitle>
 								<CardDescription>
 									Recently used database connections
 								</CardDescription>
-							</div>
+							</>
 						</div>
 					</CardHeader>
 					<CardContent>
@@ -284,14 +284,14 @@ export default function DatabasePage() {
 								>
 									<div className="flex items-center gap-3">
 										<Database className="h-4 w-4 text-muted-foreground" />
-										<div>
+										<>
 											<p className="font-medium">{connection.name}</p>
 											<p className="text-sm text-muted-foreground">
 												{connection.type === 'url'
 													? connection.url
 													: `${connection.fields?.username}@${connection.fields?.host}:${connection.fields?.port}/${connection.fields?.database}`}
 											</p>
-										</div>
+										</>
 									</div>
 									<div className="flex items-center gap-2">
 										<Button
