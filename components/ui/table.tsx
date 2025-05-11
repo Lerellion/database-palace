@@ -1,5 +1,4 @@
 import { cn } from 'helpers'
-
 import * as React from 'react'
 
 const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(

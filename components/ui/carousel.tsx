@@ -1,10 +1,9 @@
 'use client'
 
-import { cn } from 'helpers'
-
 import { Button } from '@/components/ui/button'
 
 import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react'
+import { cn } from 'helpers'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import * as React from 'react'
 

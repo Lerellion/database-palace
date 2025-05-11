@@ -1,13 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 import { Button } from './button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './card'
 import { Input } from './input'
 import { Label } from './label'
 import { Switch } from './switch'
-import { toast } from './use-toast'
 
 type ConnectionFormData = {
 	url: string
@@ -41,12 +41,10 @@ export function DatabaseConnection() {
 				throw new Error(data.error || 'Failed to connect to database')
 			}
 
-			toast({
-				title: 'Connection successful',
+			toast.success('Connection successful', {
 				description: 'Successfully connected to the database'
 			})
 
-			// Optionally store the connection in localStorage or state management
 			localStorage.setItem(
 				'dbConnection',
 				JSON.stringify({
@@ -55,11 +53,9 @@ export function DatabaseConnection() {
 				})
 			)
 		} catch (error) {
-			toast({
-				title: 'Connection failed',
+			toast.error('Connection failed', {
 				description:
-					error instanceof Error ? error.message : 'Failed to connect to database',
-				variant: 'destructive'
+					error instanceof Error ? error.message : 'Failed to connect to database'
 			})
 		} finally {
 			setIsConnecting(false)

@@ -1,6 +1,5 @@
 'use client'
 
-import { cn } from 'helpers'
 import { useIsMobile } from '@/hooks/use-mobile'
 
 import { Button } from '@/components/ui/button'
@@ -11,6 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 import { cva, VariantProps } from 'class-variance-authority'
+import { cn } from 'helpers'
 import {
 	ActivityIcon,
 	AlertTriangleIcon,

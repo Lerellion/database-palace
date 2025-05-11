@@ -1,6 +1,5 @@
-import { cn } from 'helpers'
-
 import { cva, type VariantProps } from 'class-variance-authority'
+import { cn } from 'helpers'
 import * as React from 'react'
 
 const badgeVariants = cva(

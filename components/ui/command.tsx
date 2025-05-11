@@ -1,10 +1,9 @@
 'use client'
 
-import { cn } from 'helpers'
-
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 
 import { Command as CommandPrimitive } from 'cmdk'
+import { cn } from 'helpers'
 import { Search } from 'lucide-react'
 import * as React from 'react'
 
