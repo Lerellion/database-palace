@@ -149,6 +149,17 @@ type DatabaseConfig = {
 
 class DatabaseService {
 	private pool: Pool | null = null
+	private currentConfig: ConnectionConfig | null = null
+	private static instance: DatabaseService | null = null
+
+	private constructor() {}
+
+	public static getInstance(): DatabaseService {
+		if (!DatabaseService.instance) {
+			DatabaseService.instance = new DatabaseService()
+		}
+		return DatabaseService.instance
+	}
 
 	private getConnectionConfig(config: ConnectionConfig): DatabaseConfig {
 		const connectionString = this.getConnectionString(config)
@@ -171,7 +182,7 @@ class DatabaseService {
 			min: parseInt(process.env.DB_POOL_MIN || '5', 10),
 			idleTimeoutMillis: parseInt(process.env.DB_IDLE_TIMEOUT || '30000', 10),
 			connectionTimeoutMillis: parseInt(process.env.DB_CONNECTION_TIMEOUT || '5000', 10),
-			maxUses: parseInt(process.env.DB_MAX_USES || '7500', 10) // Close connection after this many uses
+			maxUses: parseInt(process.env.DB_MAX_USES || '7500', 10)
 		}
 
 		return {
@@ -190,6 +201,16 @@ class DatabaseService {
 		return `postgresql://${username}:${password}@${host}:${port}/${database}`
 	}
 
+	private async ensureConnection(): Promise<void> {
+		if (!this.currentConfig) {
+			throw new Error('No connection configuration set. Please connect to a database first.')
+		}
+
+		if (!this.pool) {
+			await this.connect(this.currentConfig)
+		}
+	}
+
 	async connect(config: ConnectionConfig): Promise<boolean> {
 		try {
 			// Close existing pool if it exists
@@ -204,6 +225,9 @@ class DatabaseService {
 				ssl: dbConfig.ssl,
 				...dbConfig.pool
 			})
+
+			// Store the current config
+			this.currentConfig = config
 
 			// Add error handler after pool creation
 			this.pool.on('error', (err, client) => {
@@ -222,6 +246,7 @@ class DatabaseService {
 		} catch (error) {
 			console.error('Connection error:', error)
 			this.pool = null
+			this.currentConfig = null
 			throw error
 		}
 	}
@@ -230,21 +255,23 @@ class DatabaseService {
 		if (this.pool) {
 			await this.pool.end()
 			this.pool = null
+			this.currentConfig = null
 		}
 	}
 
 	async getTables(schema: string = 'public'): Promise<string[]> {
+		await this.ensureConnection()
 		if (!this.pool) throw new Error('Not connected to database')
 
 		try {
 			const result = await this.pool.query(
 				`
-        SELECT table_name 
-        FROM information_schema.tables 
-        WHERE table_schema = $1 
-        AND table_type = 'BASE TABLE'
-        ORDER BY table_name
-      `,
+				SELECT table_name 
+				FROM information_schema.tables 
+				WHERE table_schema = $1 
+				AND table_type = 'BASE TABLE'
+				ORDER BY table_name
+			`,
 				[schema]
 			)
 
@@ -256,13 +283,14 @@ class DatabaseService {
 	}
 
 	async getTableData(tableName: string, schema: string = 'public'): Promise<any[]> {
+		await this.ensureConnection()
 		if (!this.pool) throw new Error('Not connected to database')
 
 		try {
 			const result = await this.pool.query(`
-        SELECT * FROM "${schema}"."${tableName}" 
-        LIMIT 100
-      `)
+				SELECT * FROM "${schema}"."${tableName}" 
+				LIMIT 100
+			`)
 			return result.rows
 		} catch (error) {
 			console.error(`Error fetching data from table ${tableName}:`, error)
@@ -271,28 +299,47 @@ class DatabaseService {
 	}
 
 	async getTableColumns(tableName: string, schema: string = 'public'): Promise<any[]> {
+		await this.ensureConnection()
 		if (!this.pool) throw new Error('Not connected to database')
 
 		try {
 			const result = await this.pool.query(
 				`
-        SELECT column_name, data_type, is_nullable, column_default
-        FROM information_schema.columns
-        WHERE table_schema = $1 
-        AND table_name = $2
-        ORDER BY ordinal_position
-      `,
+				SELECT 
+					column_name, 
+					data_type, 
+					is_nullable, 
+					column_default,
+					(
+						SELECT EXISTS (
+							SELECT 1 
+							FROM information_schema.key_column_usage 
+							WHERE table_schema = $1 
+							AND table_name = $2 
+							AND column_name = columns.column_name
+						)
+					) as is_key
+				FROM information_schema.columns
+				WHERE table_schema = $1 
+				AND table_name = $2
+				ORDER BY ordinal_position
+			`,
 				[schema, tableName]
 			)
 
-			return result.rows
+			return result.rows.map(row => ({
+				name: row.column_name,
+				type: row.data_type,
+				isNullable: row.is_nullable === 'YES',
+				defaultValue: row.column_default,
+				isKey: row.is_key
+			}))
 		} catch (error) {
 			console.error(`Error fetching columns for table ${tableName}:`, error)
 			throw error
 		}
 	}
 
-	// Add new method for health check
 	async healthCheck(): Promise<boolean> {
 		if (!this.pool) return false
 
@@ -311,4 +358,5 @@ class DatabaseService {
 	}
 }
 
-export const dbService = new DatabaseService()
+// Export a singleton instance
+export const dbService = DatabaseService.getInstance()

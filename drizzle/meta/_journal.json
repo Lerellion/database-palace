@@ -1,13 +1,20 @@
 {
-	"version": "7",
-	"dialect": "pg",
-	"entries": [
-		{
-			"idx": 0,
-			"version": "7",
-			"when": 1746977107959,
-			"tag": "0000_initial_schema",
-			"breakpoints": true
-		}
-	]
+  "version": "7",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1746977107959,
+      "tag": "0000_initial_schema",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1747001943585,
+      "tag": "0001_friendly_overlord",
+      "breakpoints": true
+    }
+  ]
 }

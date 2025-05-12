@@ -1,9 +1,9 @@
+import { Providers } from '@/components/core/providers'
 import { PrimaryNav } from '@/components/primary-nav'
 import { TopNav } from '@/components/top-nav'
 
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { Toaster } from 'sonner'
 
 import '../styles/globals.css'
 import '../styles/themes.css'
@@ -16,10 +16,10 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-	const defaultTheme = 'grey'
+	const defaultTheme = 'graphite'
 
 	return (
-		<html lang="en" data-theme={defaultTheme}>
+		<html lang="en" data-theme={defaultTheme} suppressHydrationWarning>
 			<head>
 				<link rel="icon" href="/favicon.ico" sizes="any" />
 				<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -29,14 +29,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 			</head>
 			<body className={inter.className}>
-				<div className="flex h-screen flex-col bg-background text-foreground">
-					<TopNav />
-					<div className="flex flex-1">
-						<PrimaryNav />
-						<main className="flex flex-1 overflow-auto">{children}</main>
+				<Providers>
+					<div className="flex h-screen flex-col bg-background text-foreground">
+						<TopNav />
+						<div className="flex flex-1">
+							<PrimaryNav />
+							<main className="flex flex-1 overflow-auto">{children}</main>
+						</div>
 					</div>
-				</div>
-				<Toaster />
+				</Providers>
 			</body>
 		</html>
 	)

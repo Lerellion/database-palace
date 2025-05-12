@@ -19,72 +19,78 @@ type TableColumn = {
 	type: string
 	isNullable: boolean
 	defaultValue: string | null
-	isPrimaryKey: boolean
+	isKey: boolean
 }
 
-type TTableMetadata = {
+type TProps = {
 	name: string
-	rowCount: number
-	size: string
-	lastAnalyzed: string
-	columns: TableColumn[]
+	columns?: TableColumn[]
+	isLoading?: boolean
+	error?: string
 }
 
 export default function TablesPage() {
-	const [tables, setTables] = useState<TTableMetadata[]>([])
+	const [tables, setTables] = useState<TProps[]>([])
 	const [searchQuery, setSearchQuery] = useState('')
 	const [isLoading, setIsLoading] = useState(true)
 	const [error, setError] = useState<string | null>(null)
-	const [selectedTable, setSelectedTable] = useState<string | null>(null)
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 	const [tableToDelete, setTableToDelete] = useState<string | null>(null)
 
 	useEffect(() => {
-		async function fetchTables() {
-			try {
-				setIsLoading(true)
-				setError(null)
-
-				const tablesResponse = await fetch('/api/tables')
-				if (!tablesResponse.ok) throw new Error('Failed to fetch tables')
-				const tablesData = await tablesResponse.json()
-
-				const tablesWithMetadata = await Promise.all(
-					tablesData.tables.map(async (tableName: string) => {
-						const dataResponse = await fetch(`/api/data?table=${tableName}&limit=1`)
-						if (!dataResponse.ok)
-							throw new Error(`Failed to fetch data for ${tableName}`)
-						const { pagination } = await dataResponse.json()
-
-						const columnsResponse = await fetch(`/api/tables/${tableName}/columns`)
-						if (!columnsResponse.ok)
-							throw new Error(`Failed to fetch columns for ${tableName}`)
-						const columnsData = await columnsResponse.json()
-
-						const sizeResponse = await fetch(`/api/tables/${tableName}/size`)
-						const sizeData = await sizeResponse.json()
-
-						return {
-							name: tableName,
-							rowCount: pagination.total,
-							size: sizeData.size || 'Unknown',
-							lastAnalyzed: new Date().toISOString().split('T')[0],
-							columns: columnsData.columns
-						}
-					})
-				)
-
-				setTables(tablesWithMetadata)
-			} catch (err) {
-				console.error('Error fetching tables:', err)
-				setError(err instanceof Error ? err.message : 'Failed to fetch tables')
-			} finally {
-				setIsLoading(false)
-			}
-		}
-
 		fetchTables()
 	}, [])
+
+	const fetchTables = async () => {
+		try {
+			const response = await fetch('/api/tables')
+			const data = await response.json()
+
+			if (data.error) {
+				throw new Error(data.error)
+			}
+
+			// Initialize tables with basic info
+			setTables(data.tables.map((name: string) => ({ name })))
+			setIsLoading(false)
+		} catch (error) {
+			console.error('Error fetching tables:', error)
+			setIsLoading(false)
+		}
+	}
+
+	const fetchTableColumns = async (tableName: string) => {
+		const table = tables.find(t => t.name === tableName)
+		if (table?.columns || table?.isLoading) return
+
+		// Update loading state
+		setTables(prev => prev.map(t => (t.name === tableName ? { ...t, isLoading: true } : t)))
+
+		try {
+			const response = await fetch(`/api/tables/${tableName}/columns`)
+			const data = await response.json()
+
+			if (data.error) {
+				throw new Error(data.error)
+			}
+
+			// Update table with columns
+			setTables(prev =>
+				prev.map(t =>
+					t.name === tableName ? { ...t, columns: data.columns, isLoading: false } : t
+				)
+			)
+		} catch (error) {
+			console.error(`Error fetching columns for ${tableName}:`, error)
+			setTables(prev =>
+				prev.map(t =>
+					t.name === tableName
+						? { ...t, error: 'Failed to fetch columns', isLoading: false }
+						: t
+				)
+			)
+		}
+	}
 
 	const filteredTables = tables.filter(table =>
 		table.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -93,12 +99,6 @@ export default function TablesPage() {
 	const handleCreateTable = async () => {
 		// TODO: Implement table creation dialog
 		console.log('Create table')
-	}
-
-	const handleViewTable = (tableName: string) => {
-		setSelectedTable(tableName)
-		// TODO: Navigate to table viewer/editor
-		console.log('View table', tableName)
 	}
 
 	const handleEditTable = async (tableName: string) => {
@@ -153,7 +153,7 @@ export default function TablesPage() {
 
 				<div className="grid gap-4">
 					{isLoading ? (
-						<div>Loading...</div>
+						<div>Loading tables...</div>
 					) : error ? (
 						<div className="text-red-500">{error}</div>
 					) : filteredTables.length === 0 ? (
@@ -169,41 +169,73 @@ export default function TablesPage() {
 									<div className="flex-1">
 										<h3 className="font-medium">{table.name}</h3>
 										<div className="text-sm text-muted-foreground">
-											{table.rowCount.toLocaleString()} rows • {table.size}
-										</div>
-										<div className="mt-2 text-sm text-muted-foreground">
-											{table.columns.length} columns •{' '}
-											{table.columns
-												.filter(col => col.isPrimaryKey)
-												.map(col => col.name)
-												.join(', ') || 'No primary key'}
+											{table.isLoading ? (
+												'Loading columns...'
+											) : table.error ? (
+												<span className="text-red-500">{table.error}</span>
+											) : table.columns ? (
+												`${table.columns.length} columns`
+											) : (
+												'Click to view details'
+											)}
 										</div>
 									</div>
-									<div className="flex gap-2">
-										<Button
-											variant="outline"
-											size="sm"
-											onClick={() => handleViewTable(table.name)}
-										>
-											View
-										</Button>
-										<Button
-											variant="outline"
-											size="sm"
-											onClick={() => handleEditTable(table.name)}
-										>
-											<PencilIcon className="w-4 h-4" />
-										</Button>
-										<Button
-											variant="outline"
-											size="sm"
-											className="text-red-500 hover:text-red-700"
-											onClick={() => handleDeleteClick(table.name)}
-										>
-											<TrashIcon className="w-4 h-4" />
-										</Button>
-									</div>
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => fetchTableColumns(table.name)}
+										disabled={table.isLoading}
+									>
+										{table.columns ? 'View' : 'Load Columns'}
+									</Button>
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => handleEditTable(table.name)}
+									>
+										<PencilIcon className="w-4 h-4" />
+									</Button>
+									<Button
+										variant="outline"
+										size="sm"
+										className="text-red-500 hover:text-red-700"
+										onClick={() => handleDeleteClick(table.name)}
+									>
+										<TrashIcon className="w-4 h-4" />
+									</Button>
 								</div>
+								{table.columns && (
+									<div className="mt-4 pl-8">
+										<div className="text-sm font-medium mb-2">Columns:</div>
+										<div className="grid gap-1">
+											{table.columns.map((column: TableColumn) => (
+												<div
+													key={column.name}
+													className="text-sm flex items-center gap-2"
+												>
+													<span
+														className={
+															column.isKey ? 'font-medium' : ''
+														}
+													>
+														{column.name}
+													</span>
+													<span className="text-muted-foreground">
+														{column.type}
+														{!column.isNullable && ' NOT NULL'}
+														{column.defaultValue &&
+															` DEFAULT ${column.defaultValue}`}
+													</span>
+													{column.isKey && (
+														<span className="text-xs bg-primary/10 text-primary px-1 rounded">
+															KEY
+														</span>
+													)}
+												</div>
+											))}
+										</div>
+									</div>
+								)}
 							</div>
 						))
 					)}

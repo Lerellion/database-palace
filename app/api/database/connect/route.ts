@@ -23,9 +23,6 @@ export async function POST(request: Request) {
 		// Get tables
 		const tables = await dbService.getTables(type === 'fields' ? fields.schema : 'public')
 
-		// Close the connection
-		await dbService.disconnect()
-
 		return NextResponse.json({
 			message: 'Successfully connected to database',
 			connected: true,

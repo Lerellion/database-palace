@@ -1,8 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { Database } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
+import { Alert, AlertDescription, AlertTitle } from './alert'
 import { Button } from './button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './card'
 import { Input } from './input'
@@ -21,6 +23,39 @@ export function DatabaseConnection() {
 		sslEnabled: false
 	})
 	const [isConnecting, setIsConnecting] = useState(false)
+	const [dockerStatus, setDockerStatus] = useState<'checking' | 'running' | 'not-running'>(
+		'checking'
+	)
+
+	useEffect(() => {
+		// Check if Docker PostgreSQL is running
+		async function checkDockerStatus() {
+			try {
+				const response = await fetch('/api/database/connect', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						type: 'fields',
+						fields: {
+							host: 'localhost',
+							port: '5433',
+							database: 'database_palace',
+							username: 'postgres',
+							password: 'postgres'
+						}
+					})
+				})
+
+				setDockerStatus(response.ok ? 'running' : 'not-running')
+			} catch {
+				setDockerStatus('not-running')
+			}
+		}
+
+		checkDockerStatus()
+	}, [])
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
@@ -71,6 +106,31 @@ export function DatabaseConnection() {
 				</CardDescription>
 			</CardHeader>
 			<CardContent>
+				{/* Docker Status Alert */}
+				{dockerStatus === 'running' && (
+					<Alert className="mb-6 bg-emerald-500/10 border-emerald-500/20">
+						<Database className="h-4 w-4 text-emerald-500" />
+						<AlertTitle>Docker PostgreSQL Available</AlertTitle>
+						<AlertDescription>
+							A local Docker PostgreSQL instance is running on port 5433. You can
+							connect to it using the Quick Connect option above.
+						</AlertDescription>
+					</Alert>
+				)}
+				{dockerStatus === 'not-running' && (
+					<Alert className="mb-6 bg-amber-500/10 border-amber-500/20">
+						<Database className="h-4 w-4 text-amber-500" />
+						<AlertTitle>Docker PostgreSQL Not Found</AlertTitle>
+						<AlertDescription>
+							Start your Docker PostgreSQL container with:
+							<br />
+							<code className="text-xs bg-muted p-2 rounded-md block mt-2">
+								docker-compose up -d
+							</code>
+						</AlertDescription>
+					</Alert>
+				)}
+
 				<form onSubmit={handleSubmit} className="space-y-4">
 					<div className="space-y-2">
 						<Label htmlFor="url">Database URL</Label>

@@ -1,32 +1,24 @@
-import { Column } from '../types'
-import { getInputType } from '../utils/data-formatting'
-import { CellSkeleton } from './cell-skeleton'
+import { Skeleton } from '@/components/ui/skeleton'
 
-type EditableCellSkeletonProps = {
+import { Column } from '../types'
+
+type TProps = {
 	column: Column
 }
 
-export function EditableCellSkeleton({ column }: EditableCellSkeletonProps) {
-	const inputType = getInputType(column.type)
-	let type: 'text' | 'boolean' | 'number' | 'date' = 'text'
-
-	switch (inputType) {
-		case 'number':
-			type = 'number'
-			break
-		case 'date':
-		case 'datetime-local':
-		case 'time':
-			type = 'date'
-			break
-		case 'boolean':
-			type = 'boolean'
-			break
+export function EditableCellSkeleton({ column }: TProps) {
+	if (column.isPrimaryKey) {
+		return (
+			<div className="flex items-center space-x-2">
+				<Skeleton className="h-4 w-16" />
+			</div>
+		)
 	}
 
-	return (
-		<div className="px-1 py-0.5">
-			<CellSkeleton type={type} />
-		</div>
-	)
+	const inputType = column.type.toLowerCase()
+	if (inputType === 'boolean') {
+		return <Skeleton className="h-6 w-10 rounded-full" />
+	}
+
+	return <Skeleton className="h-7 w-full" />
 }

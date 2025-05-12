@@ -3,7 +3,13 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-export type ColorTheme = 'grey' | 'sunset-horizon' | 'pastel-dream' | 'solar-dusk'
+export type ColorTheme =
+	| 'grey'
+	| 'sunset-horizon'
+	| 'solar-dusk'
+	| 'graphite'
+	| 'caffeine'
+	| 'caffeine-dark'
 
 type TTheme = {
 	colorTheme: ColorTheme

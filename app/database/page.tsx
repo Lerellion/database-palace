@@ -37,6 +37,23 @@ export default function DatabasePage() {
 		}
 	})
 
+	const handleDockerQuickConnect = async () => {
+		const dockerConfig = {
+			type: 'fields' as ConnectionType,
+			name: 'Docker PostgreSQL',
+			fields: {
+				host: 'localhost',
+				port: '5433',
+				database: 'database_palace',
+				schema: 'public',
+				username: 'postgres',
+				password: 'postgres'
+			}
+		}
+
+		await handleConnect(dockerConfig)
+	}
+
 	const handleConnect = async (connection?: ConnectionConfig) => {
 		const connectionConfig = connection || {
 			type: connectionMethod,
@@ -136,6 +153,43 @@ export default function DatabasePage() {
 					</p>
 				</>
 			</div>
+
+			<Card className="mb-6">
+				<CardHeader>
+					<CardTitle>Quick Connect</CardTitle>
+					<CardDescription>
+						Connect to your local Docker PostgreSQL instance
+					</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<div className="flex items-center gap-4">
+						<div className="flex-1">
+							<p className="text-sm text-muted-foreground mb-2">
+								Docker PostgreSQL Configuration:
+							</p>
+							<code className="text-xs bg-muted p-2 rounded-md block">
+								Host: localhost
+								<br />
+								Port: 5433
+								<br />
+								Database: database_palace
+								<br />
+								Username: postgres
+								<br />
+								Password: postgres
+							</code>
+						</div>
+						<Button
+							onClick={handleDockerQuickConnect}
+							disabled={isConnecting}
+							className="flex items-center gap-2"
+						>
+							<Database className="h-4 w-4" />
+							{isConnecting ? 'Connecting...' : 'Connect to Docker'}
+						</Button>
+					</div>
+				</CardContent>
+			</Card>
 
 			<Card>
 				<CardHeader>

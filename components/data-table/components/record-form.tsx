@@ -1,5 +1,7 @@
 'use client'
 
+import { cn } from '@/lib/utils'
+
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -11,10 +13,9 @@ import {
 	SelectValue
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
-import { toast } from '@/components/ui/use-toast'
 
-import { cn } from 'helpers'
 import { Suspense, useState } from 'react'
+import { toast } from 'sonner'
 
 import { TableService } from '../services/table-service'
 import { Column, TableRecord } from '../types'
@@ -117,18 +118,15 @@ function RecordFormContent({ tableName, columns, initialData, onSuccess, onCance
 				await TableService.createRecord(tableName, formDataToSubmit)
 			}
 
-			toast({
-				title: `Record ${initialData ? 'updated' : 'created'} successfully`,
+			toast.success(`Record ${initialData ? 'updated' : 'created'} successfully`, {
 				description: `The record has been ${initialData ? 'updated' : 'added'} to ${tableName}`
 			})
 
 			onSuccess()
 		} catch (error) {
 			console.error('Error saving record:', error)
-			toast({
-				title: 'Error saving record',
-				description: error instanceof Error ? error.message : 'Failed to save record',
-				variant: 'destructive'
+			toast.error('Error saving record', {
+				description: error instanceof Error ? error.message : 'Failed to save record'
 			})
 		} finally {
 			setLoading(false)

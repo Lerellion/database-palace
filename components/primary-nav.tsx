@@ -16,11 +16,11 @@ import { usePathname } from 'next/navigation'
 
 const navigation = [
 	{ name: 'Dashboard', href: '/dashboard', icon: Grid, disabled: true },
-	{ name: 'Tables', href: '/tables', icon: Table, disabled: false },
+	{ name: 'Tables', href: '/database/tables', icon: Table, disabled: false },
 	{ name: 'Database', href: '/database', icon: Database, disabled: true },
 	{ name: 'Auth', href: '/auth', icon: KeyRound, disabled: true },
 	{ name: 'Analytics', href: '/analytics', icon: BarChart, disabled: true },
-	{ name: 'Functions', href: '/functions', icon: FileCode, disabled: true },
+	{ name: 'Functions', href: '/functions', icon: FileCode, disabled: false },
 	{ name: 'SQL Editor', href: '/sql', icon: Terminal, disabled: true },
 	{ name: 'Settings', href: '/settings', icon: Settings, disabled: true }
 ]

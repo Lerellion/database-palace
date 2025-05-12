@@ -1,17 +1,34 @@
 export type Column = {
 	name: string
 	type: string
-	isPrimaryKey?: boolean
-	isNotNull?: boolean
-	defaultValue?: any
+	isNotNull: boolean
+	isNullable: boolean
+	defaultValue: string | null
+	isKey: boolean
+	isPrimaryKey: boolean
 	maxLength?: number
-	precision?: number
-	scale?: number
 }
 
 export type TableRecord = {
+	id: number | string
 	[key: string]: any
-	id: string | number
+}
+
+export type PaginationParams = {
+	page?: number
+	limit?: number
+	orderBy?: string
+	orderDirection?: 'asc' | 'desc'
+	filters?: Record<string, any>
+}
+
+export type TableService = {
+	createRecord: (tableName: string, data: Record<string, any>) => Promise<any>
+	updateRecord: (
+		tableName: string,
+		params: { data: Record<string, any>; where: Record<string, any> }
+	) => Promise<any>
+	deleteRecord: (tableName: string, where: Record<string, any>) => Promise<any>
 }
 
 export type UpdatePayload = {

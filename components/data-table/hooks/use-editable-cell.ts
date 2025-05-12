@@ -1,13 +1,12 @@
 'use client'
 
-import { toast } from '@/components/ui/use-toast'
-
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 import { TableService } from '../services/table-service'
 import { Column, TableRecord } from '../types'
 
-type IUseEditableCellProps = {
+type TProps = {
 	initialValue: any
 	column: Column
 	tableName: string
@@ -15,39 +14,13 @@ type IUseEditableCellProps = {
 	onUpdate: () => void
 }
 
-type IUseEditableCellReturn = {
-	value: any
-	isEditing: boolean
-	loading: boolean
-	setIsEditing: (value: boolean) => void
-	setValue: (value: any) => void
-	handleUpdate: (newValue: any) => Promise<void>
-	resetValue: () => void
-}
-
-export function useEditableCell({
-	initialValue,
-	column,
-	tableName,
-	record,
-	onUpdate
-}: IUseEditableCellProps): IUseEditableCellReturn {
-	const [isEditing, setIsEditing] = useState(false)
+export function useEditableCell({ initialValue, column, tableName, record, onUpdate }: TProps) {
 	const [value, setValue] = useState(initialValue)
+	const [isEditing, setIsEditing] = useState(false)
 	const [loading, setLoading] = useState(false)
 
-	useEffect(() => {
-		setValue(initialValue)
-	}, [initialValue])
-
-	const resetValue = useCallback(() => {
-		setValue(initialValue)
-		setIsEditing(false)
-	}, [initialValue])
-
 	const handleUpdate = async (newValue: any) => {
-		if (column.isPrimaryKey) return
-		if (newValue === value) {
+		if (newValue === initialValue) {
 			setIsEditing(false)
 			return
 		}
@@ -59,24 +32,26 @@ export function useEditableCell({
 				where: { id: record.id }
 			})
 
-			setValue(newValue)
-			onUpdate()
-			toast({
-				title: 'Value updated',
+			toast.success('Value updated', {
 				description: `Successfully updated ${column.name}`
 			})
+
+			onUpdate()
+			setIsEditing(false)
 		} catch (error) {
 			console.error('Error updating value:', error)
-			setValue(initialValue) // Reset on error
-			toast({
-				title: 'Error updating value',
-				description: error instanceof Error ? error.message : 'Failed to update value',
-				variant: 'destructive'
+			toast.error('Error updating value', {
+				description: error instanceof Error ? error.message : 'Failed to update value'
 			})
+			setValue(initialValue)
 		} finally {
 			setLoading(false)
-			setIsEditing(false)
 		}
+	}
+
+	const resetValue = () => {
+		setValue(initialValue)
+		setIsEditing(false)
 	}
 
 	return {

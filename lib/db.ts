@@ -1,29 +1,7 @@
-import { drizzle } from 'drizzle-orm/postgres-js'
-import postgres from 'postgres'
+import Database from 'better-sqlite3'
+import { drizzle } from 'drizzle-orm/better-sqlite3'
 
-let neonDb: ReturnType<typeof drizzle> | null = null
-let sqliteDb: ReturnType<typeof drizzle> | null = null
+import * as schema from './schema/connection'
 
-export function getNeonDb() {
-	if (!neonDb) {
-		const connectionString = process.env.DATABASE_URL
-		if (!connectionString) {
-			throw new Error('DATABASE_URL environment variable is not set')
-		}
-
-		const client = postgres(connectionString)
-		neonDb = drizzle(client)
-	}
-	return neonDb
-}
-
-export function getSqliteDb() {
-	if (!sqliteDb) {
-		throw new Error('SQLite database is not initialized')
-	}
-	return sqliteDb
-}
-
-export function initSqliteDb(db: ReturnType<typeof drizzle>) {
-	sqliteDb = db
-}
+const sqlite = new Database('sqlite.db')
+export const db = drizzle(sqlite, { schema })
