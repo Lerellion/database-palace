@@ -1,5 +1,5 @@
-import ConnectionForm from '@/components/database/ConnectionForm'
-import ConnectionList from '@/components/database/ConnectionList'
+import ConnectionForm from '@/components/database/connection-form'
+import ConnectionList from '@/components/database/connection-list'
 
 import { Suspense } from 'react'
 

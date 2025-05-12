@@ -1,3 +1,5 @@
+'use client'
+
 import { Connection } from '@/lib/schema/connection'
 
 import { Button } from '@/components/ui/button'
@@ -27,9 +29,10 @@ export default function ConnectionList() {
 				throw new Error('Failed to fetch connections')
 			}
 			const data = await response.json()
-			setConnections(data)
+			setConnections(data.connections || [])
 		} catch (error) {
 			console.error('Error fetching connections:', error)
+			setConnections([])
 		} finally {
 			setIsLoading(false)
 		}

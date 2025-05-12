@@ -1,68 +1,91 @@
 import { getEnumValues as getEnumValuesFromSchema } from '@/lib/schema/enums'
 
 export function getInputType(columnType: string): string {
-	const baseType = columnType.toLowerCase().includes('enum') ? 'enum' : columnType.toLowerCase()
+	const type = columnType.toLowerCase()
 
-	switch (baseType) {
-		case 'integer':
-		case 'bigint':
-		case 'decimal':
-		case 'numeric':
-			return 'number'
-		case 'timestamp':
-		case 'timestamp without time zone':
-			return 'datetime-local'
-		case 'date':
-			return 'date'
-		case 'time':
-			return 'time'
-		case 'boolean':
-			return 'boolean'
-		case 'enum':
-			return 'enum'
-		default:
-			return 'text'
+	if (
+		type.includes('int') ||
+		type.includes('decimal') ||
+		type.includes('numeric') ||
+		type.includes('float')
+	) {
+		return 'number'
 	}
+
+	if (type.includes('timestamp') || type.includes('datetime')) {
+		return 'datetime-local'
+	}
+
+	if (type.includes('date')) {
+		return 'date'
+	}
+
+	if (type.includes('time')) {
+		return 'time'
+	}
+
+	if (type === 'boolean') {
+		return 'boolean'
+	}
+
+	if (type.startsWith('enum')) {
+		return 'enum'
+	}
+
+	return 'text'
 }
 
-export function formatValue(value: any, type: string): any {
-	if (value === null || value === undefined) return ''
+export function formatValue(value: any, type: string): string {
+	if (value === null || value === undefined) {
+		return ''
+	}
 
-	const baseType = type.toLowerCase().includes('enum') ? 'enum' : type.toLowerCase()
+	const inputType = getInputType(type)
 
-	switch (baseType) {
-		case 'timestamp':
-		case 'timestamp without time zone':
-			return value.slice(0, 16) // Format for datetime-local input
+	switch (inputType) {
+		case 'datetime-local':
+			return new Date(value).toISOString().slice(0, 16)
+		case 'date':
+			return new Date(value).toISOString().slice(0, 10)
+		case 'time':
+			return new Date(value).toISOString().slice(11, 16)
+		case 'boolean':
+			return value ? 'true' : 'false'
 		default:
-			return value
+			return String(value)
 	}
 }
 
 export function parseInputValue(value: any, type: string): any {
-	if (value === '') return null
+	if (value === '' || value === null || value === undefined) {
+		return null
+	}
 
-	const baseType = type.toLowerCase().includes('enum') ? 'enum' : type.toLowerCase()
+	const inputType = getInputType(type)
 
-	switch (baseType) {
-		case 'integer':
-		case 'bigint':
-			return parseInt(value, 10)
-		case 'decimal':
-		case 'numeric':
-			return parseFloat(value)
+	switch (inputType) {
+		case 'number':
+			return Number(value)
 		case 'boolean':
 			return Boolean(value)
-		case 'enum':
-			return value // Keep enum values as strings
+		case 'datetime-local':
+		case 'date':
+		case 'time':
+			return new Date(value).toISOString()
 		default:
 			return value
 	}
 }
 
 // Get enum values based on the column type
-export function getEnumValues(columnType: string): string[] {
-	// Extract the base enum type name from the column type
-	const enumType = columnType.toLowerCase().replace('_enum', '')
-	return getEnumValuesFromSchema(enumType)
+export function getEnumValues(type: string): string[] {
+	// Extract enum values from type string
+	// Example: "enum('active','inactive','pending')" -> ['active', 'inactive', 'pending']
+	const match = type.match(/enum\((.*)\)/)
+	if (!match) return []
+
+	return match[1]
+		.split(',')
+		.map(value => value.trim().replace(/'/g, ''))
+		.filter(Boolean)
 }

@@ -14,8 +14,9 @@
 		"lint": "eslint . --ext .ts,.tsx --fix",
 		"f": "prettier --write \"**/*.{ts,tsx,json,md}\"",
 		"format:check": "prettier --check \"**/*.{ts,tsx,json,md}\"",
-		"db:seed": "ts-node scripts/seed.ts",
-		"db:migrate": "tsx scripts/migrate.ts"
+		"seed": "ts-node scripts/seed.ts",
+		"db:migrate": "tsx scripts/migrate.ts",
+		"migrate": "tsx scripts/migrate.ts"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^5.0.1",

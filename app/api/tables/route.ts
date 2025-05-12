@@ -1,25 +1,42 @@
-import { db } from '@/lib/services/database'
+import { dbService } from '@/lib/services/database'
 
-import { sql } from 'drizzle-orm'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
 	try {
-		// Query to get all user tables from PostgreSQL
-		const result = await db.execute(sql`
-      SELECT table_name 
-      FROM information_schema.tables 
-      WHERE table_schema = 'public' 
-      AND table_type = 'BASE TABLE'
-      ORDER BY table_name;
-    `)
+		// Check if we have an active connection
+		const isConnected = await dbService.healthCheck()
 
-		// Extract table names from the result
-		const tables = (result as any[]).map(row => row.table_name)
+		if (!isConnected) {
+			return NextResponse.json(
+				{
+					error: 'No active database connection',
+					message: 'Please connect to a database first',
+					tables: [],
+					currentSchema: null
+				},
+				{ status: 400 }
+			)
+		}
 
-		return NextResponse.json({ tables })
+		// Get the current schema and fetch tables
+		const currentSchema = dbService.getCurrentSchema()
+		const tables = await dbService.getTables(currentSchema)
+
+		return NextResponse.json({
+			tables,
+			currentSchema
+		})
 	} catch (error) {
 		console.error('Error fetching tables:', error)
-		return NextResponse.json({ error: 'Failed to fetch tables' }, { status: 500 })
+		return NextResponse.json(
+			{
+				error: 'Failed to fetch tables',
+				details: error instanceof Error ? error.message : 'Unknown error',
+				tables: [],
+				currentSchema: null
+			},
+			{ status: 500 }
+		)
 	}
 }

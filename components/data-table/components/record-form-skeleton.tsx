@@ -1,8 +1,10 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
 
 import { Column } from '../types'
+import { getInputType } from '../utils/data-formatting'
 import { FormFieldSkeleton } from './form-field-skeleton'
 import { ScrollableContainer } from './scrollable-container'
 
@@ -15,9 +17,15 @@ export function RecordFormSkeleton({ columns }: RecordFormSkeletonProps) {
 		<div className="flex flex-col h-full">
 			<ScrollableContainer className="flex-grow">
 				<div className="space-y-4">
-					{columns.map(column => (
-						<FormFieldSkeleton key={column.name} column={column} />
-					))}
+					{columns.map(column => {
+						const inputType = getInputType(column.type)
+						return (
+							<div key={column.name} className="space-y-2">
+								<Skeleton className="h-4 w-24" />
+								<FormFieldSkeleton type={inputType} />
+							</div>
+						)
+					})}
 				</div>
 			</ScrollableContainer>
 

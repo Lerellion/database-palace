@@ -9,6 +9,7 @@ import { Database, Table as TableIcon } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 
+import { TableDataView } from './table-data-view'
 import { useConnectionStore } from '@/state/'
 
 function TableViewContent() {
@@ -18,7 +19,7 @@ function TableViewContent() {
 
 	if (!isConnected) {
 		return (
-			<div className="grid place-items-center w-full h-screen AAAA">
+			<div className="grid place-items-center w-full h-screen">
 				<Card className="w-96 p-6">
 					<div className="flex flex-col items-center gap-4 text-center">
 						<Database className="h-12 w-12 text-muted-foreground" />
@@ -39,7 +40,7 @@ function TableViewContent() {
 
 	if (!tables || tables.length === 0) {
 		return (
-			<div className="grid place-items-center w-full h-screen AAAA">
+			<div className="grid place-items-center w-full h-screen">
 				<Card className="w-96 p-6">
 					<div className="flex flex-col items-center gap-4 text-center">
 						<TableIcon className="h-12 w-12 text-muted-foreground" />
@@ -57,7 +58,7 @@ function TableViewContent() {
 
 	if (!currentTable) {
 		return (
-			<div className="grid place-items-center w-full h-screen AAAA">
+			<div className="grid place-items-center w-full h-screen">
 				<Card className="w-96 p-6">
 					<div className="flex flex-col items-center gap-4 text-center">
 						<TableIcon className="h-12 w-12 text-muted-foreground" />
@@ -94,19 +95,25 @@ function TableViewContent() {
 
 				<ScrollArea className="h-[calc(100vh-12rem)]">
 					<TabsContent value="data" className="p-4">
-						{/* Table data content */}
+						<TableDataView tableName={currentTable} />
 					</TabsContent>
 
 					<TabsContent value="structure" className="p-4">
-						{/* Table structure content */}
+						<div className="text-sm text-muted-foreground">
+							Table structure information will be available soon.
+						</div>
 					</TabsContent>
 
 					<TabsContent value="indexes" className="p-4">
-						{/* Table indexes content */}
+						<div className="text-sm text-muted-foreground">
+							Table indexes information will be available soon.
+						</div>
 					</TabsContent>
 
 					<TabsContent value="constraints" className="p-4">
-						{/* Table constraints content */}
+						<div className="text-sm text-muted-foreground">
+							Table constraints information will be available soon.
+						</div>
 					</TabsContent>
 				</ScrollArea>
 			</Tabs>

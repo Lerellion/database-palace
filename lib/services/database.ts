@@ -1,56 +1,26 @@
 import { asc, desc, eq, sql } from 'drizzle-orm'
+import { drizzle } from 'drizzle-orm/node-postgres'
 import { PgColumn } from 'drizzle-orm/pg-core'
-import { drizzle } from 'drizzle-orm/postgres-js'
 import { Pool } from 'pg'
 import postgres, { Options } from 'postgres'
 
-import * as schema from '../schema/postgres'
+import { createDb } from '../db'
+import { Connection, connections } from '../schema/connection'
 import { ConnectionConfig } from '@/state/'
 
-// Database connection configuration
-function getDatabaseConfig() {
-	const databaseUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL
+// Create a default pool for initial connection
+const pool = new Pool({
+	connectionString: process.env.DATABASE_URL,
+	ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined
+})
 
-	if (!databaseUrl) {
-		throw new Error(
-			'Database URL not provided. Set POSTGRES_URL or DATABASE_URL in your environment variables.'
-		)
-	}
+// Export the drizzle instance with the schema
+export const db = drizzle(pool)
 
-	// Parse the URL to determine if it's a cloud provider
-	const isCloudProvider = !databaseUrl.includes('localhost') && !databaseUrl.includes('127.0.0.1')
+// Export the pool for raw queries
+export const pgPool = pool
 
-	// SSL configuration
-	const sslEnabled = process.env.DB_SSL_ENABLED === 'true' || isCloudProvider
-	const sslCA = process.env.DB_SSL_CA
-
-	const config: unknown = {
-		max: 10, // Maximum pool size
-		idle_timeout: 20, // Max idle time in seconds
-		connect_timeout: 10 // Connection timeout in seconds
-	}
-
-	// Add SSL configuration if needed
-	if (sslEnabled) {
-		;(config as unknown as { ssl: { rejectUnauthorized: boolean; ca?: string[] } }).ssl = {
-			rejectUnauthorized: false, // Set to true in production with proper certificates
-			ca: sslCA ? [require('fs').readFileSync(sslCA)] : undefined
-		}
-	}
-
-	return { url: databaseUrl, config }
-}
-
-// Get database configuration
-const { url: databaseUrl, config } = getDatabaseConfig()
-
-// Create postgres client with configuration
-const client = postgres(databaseUrl, config as unknown as Options<{}>)
-
-// Create drizzle database instance
-export const db = drizzle(client, { schema })
-
-export type TableName = keyof typeof schema
+export type TableName = keyof typeof connections
 
 type PaginationParams = {
 	page?: number
@@ -87,7 +57,7 @@ export async function fetchTableData<T>({
 	tableName: TableName
 } & PaginationParams): Promise<FetchResult<T>> {
 	const offset = (page - 1) * limit
-	const table = schema[tableName]
+	const table = connections[tableName]
 
 	if (!table || typeof table !== 'object') {
 		throw new Error(`Table ${tableName} not found`)
@@ -150,6 +120,7 @@ type DatabaseConfig = {
 class DatabaseService {
 	private pool: Pool | null = null
 	private currentConfig: ConnectionConfig | null = null
+	private currentSchema: string = 'public'
 	private static instance: DatabaseService | null = null
 
 	private constructor() {}
@@ -235,10 +206,13 @@ class DatabaseService {
 				if (client) client.release(true)
 			})
 
-			// Test the connection
+			// Test the connection and set initial schema
 			const client = await this.pool.connect()
 			try {
 				await client.query('SELECT NOW()')
+				// Set initial schema from config or default to public
+				const initialSchema = config.fields?.schema || 'public'
+				await this.setSchema(initialSchema)
 				return true
 			} finally {
 				client.release()
@@ -340,8 +314,47 @@ class DatabaseService {
 		}
 	}
 
+	getCurrentConnection(): ConnectionConfig | null {
+		return this.currentConfig
+	}
+
+	getCurrentSchema(): string {
+		return this.currentSchema
+	}
+
+	async setSchema(schema: string): Promise<void> {
+		await this.ensureConnection()
+		if (!this.pool) throw new Error('Not connected to database')
+
+		try {
+			const client = await this.pool.connect()
+			try {
+				// First check if schema exists
+				const schemaExists = await client.query(
+					'SELECT EXISTS(SELECT 1 FROM information_schema.schemata WHERE schema_name = $1)',
+					[schema]
+				)
+
+				if (!schemaExists.rows[0].exists) {
+					throw new Error(`Schema "${schema}" does not exist`)
+				}
+
+				// Set search_path for the current connection
+				await client.query(`SET search_path TO "${schema}"`)
+				this.currentSchema = schema
+			} finally {
+				client.release()
+			}
+		} catch (error) {
+			console.error(`Error setting schema to ${schema}:`, error)
+			throw error
+		}
+	}
+
 	async healthCheck(): Promise<boolean> {
-		if (!this.pool) return false
+		if (!this.pool || !this.currentConfig) {
+			return false
+		}
 
 		try {
 			const client = await this.pool.connect()
@@ -354,6 +367,34 @@ class DatabaseService {
 		} catch (error) {
 			console.error('Health check failed:', error)
 			return false
+		}
+	}
+
+	async getAvailableSchemas(): Promise<string[]> {
+		await this.ensureConnection()
+		if (!this.pool) throw new Error('Not connected to database')
+
+		try {
+			const result = await this.pool.query(`
+				SELECT schema_name 
+				FROM information_schema.schemata 
+				WHERE schema_name NOT IN ('information_schema', 'pg_catalog', 'pg_toast')
+				ORDER BY schema_name
+			`)
+			return result.rows.map(row => row.schema_name)
+		} catch (error) {
+			console.error('Error fetching schemas:', error)
+			throw error
+		}
+	}
+
+	async getSavedConnections(): Promise<Connection[]> {
+		try {
+			const result = await db.select().from(connections)
+			return result
+		} catch (error) {
+			console.error('Error fetching saved connections:', error)
+			return []
 		}
 	}
 }

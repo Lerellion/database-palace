@@ -1,7 +1,7 @@
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
 
-export const connections = sqliteTable('database_connections', {
-	id: integer('id').primaryKey({ autoIncrement: true }),
+export const connections = pgTable('database_connections', {
+	id: integer('id').primaryKey(),
 	name: text('name'),
 	type: text('type'),
 	host: text('host'),
@@ -10,8 +10,8 @@ export const connections = sqliteTable('database_connections', {
 	password: text('password'),
 	database: text('database'),
 	connectionString: text('connection_string'),
-	createdAt: integer('created_at', { mode: 'timestamp' }),
-	updatedAt: integer('updated_at', { mode: 'timestamp' })
+	createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
+	updatedAt: timestamp('updated_at', { mode: 'date' }).defaultNow()
 })
 
 export type Connection = typeof connections.$inferSelect
